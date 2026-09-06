@@ -5,7 +5,7 @@ import { WordsDrawer } from "@/components/guide/words-drawer";
 export const metadata: Metadata = {
   title: "Guide",
   description:
-    "The seven-day course, the Day 0 setup walkthrough, and the motion cookbook.",
+    "The Day 0 setup walkthrough, the quick start, and the motion cookbook.",
 };
 
 /**
@@ -30,6 +30,14 @@ const ROUTES = [
     blurb:
       "Every download and every command, in order, for a designer who has never opened a terminal. Tick things off as you go; the page remembers where you got to.",
     meta: "12 sections · 60–90 minutes · macOS",
+  },
+  {
+    href: "/guide/start",
+    eyebrow: "Day 5",
+    title: "Quick start",
+    blurb:
+      "How your projects get onto the site: add a folder, get a page. Plus four prompts to paste when you want Claude to write or design one.",
+    meta: "7 sections · about 10 minutes",
   },
   {
     href: "/guide/motion",
@@ -77,7 +85,7 @@ export default function GuidePage() {
         </p>
       </header>
 
-      <ul className="m-0 grid list-none grid-cols-1 gap-step-3 p-0 md:grid-cols-2">
+      <ul className="m-0 grid list-none grid-cols-1 gap-step-3 p-0 md:grid-cols-3">
         {ROUTES.map((route) => (
           <li key={route.href}>
             <Link

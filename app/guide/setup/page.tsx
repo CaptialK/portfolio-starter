@@ -43,6 +43,16 @@ export default function SetupGuidePage() {
 
       <div className="guide" dangerouslySetInnerHTML={{ __html: html }} />
       <GuideRuntime />
+
+      <div className="mx-auto max-w-page border-t border-line px-step-4 py-step-5 md:px-step-5">
+        <Link href="/guide/start" className="font-mono text-xs text-accent no-underline">
+          Next: Quick start →
+        </Link>
+        <p className="mt-step-2 max-w-measure text-xs text-muted">
+          Everything installed? Good. Next is how your own projects get onto the
+          site — which is one folder, and no code at all.
+        </p>
+      </div>
     </>
   );
 }
