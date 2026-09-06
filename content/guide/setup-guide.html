@@ -1,0 +1,655 @@
+<div class="wrap">
+  <nav class="side" aria-label="Contents">
+    <p class="brand">Portfolio Setup Guide</p>
+    <p class="sub">Mac · Next.js + Tailwind + Claude Code</p>
+    <div class="progress" aria-live="polite">
+      <div class="bar"><div class="fill" id="fill"></div></div>
+      <div class="label"><span id="count">0 of 0 done</span><span>saved on this Mac</span></div>
+    </div>
+    <ul class="toc" id="toc">
+      <li><a href="#s0"><span class="n">00</span>Read this first</a></li>
+      <li><a href="#s1"><span class="n">01</span>Two kinds of “download”</a></li>
+      <li><a href="#s2"><span class="n">02</span>Install the apps</a></li>
+      <li><a href="#s3"><span class="n">03</span>The terminal</a></li>
+      <li><a href="#s4"><span class="n">04</span>npm</a></li>
+      <li><a href="#s5"><span class="n">05</span>Get the project</a></li>
+      <li><a href="#s6"><span class="n">06</span>Run it</a></li>
+      <li><a href="#s7"><span class="n">07</span>What's in the folder</a></li>
+      <li><a href="#s8"><span class="n">08</span>Claude Code in VS Code</a></li>
+      <li><a href="#s9"><span class="n">09</span>First push, first deploy</a></li>
+      <li><a href="#s10"><span class="n">10</span>When something breaks</a></li>
+      <li><a href="#s11"><span class="n">11</span>Words you'll hear</a></li>
+    </ul>
+    <button class="reset" id="reset" type="button">Reset checklist</button>
+  </nav>
+
+  <div class="col">
+    <p class="eyebrow">Day 0 → Day 1</p>
+    <h1>From nothing installed to a running site you can direct.</h1>
+    <p class="lede">Every download, every command, and what each one is actually for. Written for a designer who has never opened a terminal. By the end, you'll have your own copy of this portfolio running at <code>localhost:3000</code> with Claude Code sitting next to it, waiting for instructions.</p>
+    <p class="meta">macOS · about 60–90 minutes · check things off as you go; progress is saved in this browser.</p>
+
+    <!-- ============ 00 ============ -->
+    <section id="s0">
+      <h2><span class="n">00</span>Read this first</h2>
+      <p>You are not learning to code this week. You are learning to run a small, modern web project on your own machine so that an AI agent can build inside it while you watch, judge, and direct. The setup below is the same setup a front-end engineer at any product company would have. That's the point: your portfolio won't be a template someone else designed. It'll be a real codebase you own. The starter Vinson made is a skeleton with placeholder words and a placeholder look; every visual decision on it is still yours to make.</p>
+      <p>There are three ideas that make everything else make sense:</p>
+      <ol>
+        <li><strong>Apps you install once</strong> (VS Code, Node, Git) vs. <strong>packages that live inside each project</strong> (everything npm downloads). Section 01.</li>
+        <li><strong>The terminal is just a text box that runs commands</strong> inside a folder. Section 03.</li>
+        <li><strong>The dev server</strong> is what shows you your site live while it changes. Section 06.</li>
+      </ol>
+      <div class="vinson">
+        <span class="tag">House rule</span>
+        <p>You type every command yourself. Vinson can sit next to you and tell you what to type, but his hands stay off your keyboard. Watching someone else do this teaches you nothing; doing it once badly teaches you everything.</p>
+      </div>
+    </section>
+
+    <!-- ============ 01 ============ -->
+    <section id="s1">
+      <h2><span class="n">01</span>Two kinds of “download”</h2>
+      <p>You'll download things two different ways this week, and confusing them is the number one source of “wait, where did that go?”</p>
+      <div class="two">
+        <div>
+          <h4>Apps from the web</h4>
+          <ul>
+            <li>VS Code, Node.js, Git, Chrome</li>
+            <li>Download from a website, run an installer</li>
+            <li>Install <strong>once</strong> for the whole Mac</li>
+            <li>Live in <code>/Applications</code> or system folders</li>
+            <li>You'll almost never touch these again</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Packages from npm</h4>
+          <ul>
+            <li>Next.js, React, Tailwind, TanStack Query</li>
+            <li>Downloaded by typing a command in the terminal</li>
+            <li>Installed <strong>per project</strong>, into the project folder</li>
+            <li>Live in a folder called <code>node_modules</code></li>
+            <li>Listed in <code>package.json</code> so they can be re-downloaded anytime</li>
+          </ul>
+        </div>
+      </div>
+      <p class="why">Think of it like Figma vs. a Figma file's fonts and plugins. Figma is installed once. The specific fonts a file uses belong to that file. npm packages are the fonts and plugins; Node is Figma.</p>
+    </section>
+
+    <!-- ============ 02 ============ -->
+    <section id="s2">
+      <h2><span class="n">02</span>Install the apps</h2>
+      <p>Four installs and two accounts. Do them in this order; later ones assume earlier ones.</p>
+
+      <div class="step"><input type="checkbox" id="step-vscode" data-step="vscode" aria-labelledby="h-vscode">
+        <div class="body">
+          <h3>VS Code</h3>
+          <p>The editor. Files on the left, code in the middle, terminal at the bottom, Claude on the right. Everything this week happens inside this one window.</p>
+          <ol>
+            <li>Go to <a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a> and click <span class="ui">Download for macOS</span>. It's one universal build for Apple Silicon and Intel.</li>
+            <li>Open the downloaded <code>.zip</code>. It unpacks to <span class="ui">Visual Studio Code.app</span>.</li>
+            <li>Drag that app into your <span class="ui">Applications</span> folder. (If you skip this, macOS keeps it in Downloads and it behaves weirdly later.)</li>
+            <li>Open it. If macOS asks whether you're sure, say yes.</li>
+            <li>Press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>P</kbd>, type <em>shell command</em>, and choose <span class="ui">Shell Command: Install 'code' command in PATH</span>. This lets you type <code>code .</code> in a terminal to open a folder in VS Code. You'll use it constantly.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-node" data-step="node" aria-labelledby="h-node">
+        <div class="body">
+          <h3>Node.js</h3>
+          <p>The engine that runs JavaScript outside a browser. Next.js needs it to run your site locally, and installing Node also installs <strong>npm</strong>, the tool that downloads packages. You never “open” Node. It just needs to exist.</p>
+          <ol>
+            <li>Go to <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>.</li>
+            <li>Download the <span class="ui">LTS</span> version (currently v24; “LTS” means long-term support, the stable one). Pick the <span class="ui">macOS Installer (.pkg)</span>.</li>
+            <li>Open the <code>.pkg</code> and click through: Continue, Agree, Install. It'll ask for your Mac password.</li>
+            <li>When it says the install was successful, close it. That's it.</li>
+          </ol>
+          <p>Video walkthrough if you want to see it done: <a href="https://www.youtube.com/watch?v=0LWJ3gmScUY" target="_blank" rel="noopener">How To Install Node.js on Mac</a>. Any version of Node 20.9 or newer works for Next.js; LTS is the right pick.</p>
+          <div class="note">
+            <p>If you already had a terminal window open before installing Node, close it and open a new one. Terminals only learn about new programs when they start.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-git" data-step="git" aria-labelledby="h-git">
+        <div class="body">
+          <h3>Git</h3>
+          <p>Version history for your project. Every “save point” you make is a commit; pushing those commits to GitHub is what triggers your site to deploy. On a Mac, Git comes with Apple's developer tools, so the install is a one-liner.</p>
+          <ol>
+            <li>Open the <span class="ui">Terminal</span> app (press <kbd>⌘</kbd><kbd>Space</kbd>, type <em>terminal</em>, hit return). Just this once; from Section 03 onward you'll use the terminal inside VS Code.</li>
+            <li>Type <code>git --version</code> and press return.</li>
+            <li>If a version prints, you're done. If a dialog pops up saying the <span class="ui">command line developer tools</span> need to be installed, click <span class="ui">Install</span>. It takes a few minutes. Then run <code>git --version</code> again.</li>
+            <li>Tell Git who you are. Use the same email you'll use for GitHub:</li>
+          </ol>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">Terminal</span><button type="button" data-copy="git config --global user.name &quot;Your Name&quot;
+git config --global user.email &quot;you@example.com&quot;">Copy</button></div>
+<pre><span class="p">% </span><span class="c">git config --global user.name "Your Name"</span>
+<span class="p">% </span><span class="c">git config --global user.email "you@example.com"</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-claude" data-step="claude" aria-labelledby="h-claude">
+        <div class="body">
+          <h3>Claude Code, the VS Code extension</h3>
+          <p>This is the builder. It's a panel inside VS Code where you describe what you want, and it edits the files in your project. It's the same engine as the terminal version of Claude Code, with a graphical interface: you see diffs before they're applied, you can rewind, you can drag screenshots in.</p>
+          <ol>
+            <li>You need a paid Claude account (Pro or Max). Sign up at <a href="https://claude.ai" target="_blank" rel="noopener">claude.ai</a> first if you don't have one. The extension signs in with that account; no API key, no billing setup.</li>
+            <li>In VS Code, press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>X</kbd> to open the Extensions view.</li>
+            <li>Search for <span class="ui">Claude Code</span>. The publisher is <span class="ui">Anthropic</span>. Click <span class="ui">Install</span>.</li>
+            <li>Look for the ✱ spark icon: in the top-right of the editor when a file is open, and in the left Activity Bar always. Click it.</li>
+            <li>Click <span class="ui">Sign in</span>. Your browser opens; approve it; come back to VS Code. A <span class="ui">Learn Claude Code</span> checklist appears. Worth clicking through once.</li>
+          </ol>
+          <div class="note">
+            <p><strong>The extension bundles its own copy of Claude Code.</strong> You do not need to install anything else for the panel to work. Typing <code>claude</code> in the terminal is a separate install (the CLI) and is deliberately not part of this week. Section 08 explains when that becomes worth it.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-accounts" data-step="accounts" aria-labelledby="h-accounts">
+        <div class="body">
+          <h3>Two accounts: GitHub and Vercel</h3>
+          <p>GitHub is where the code lives online. Vercel is the host that turns that code into a public website, automatically, every time you push.</p>
+          <ol>
+            <li><a href="https://github.com/signup" target="_blank" rel="noopener">github.com</a> → sign up. Use a username you'd put on a résumé; it's public.</li>
+            <li><a href="https://vercel.com/signup" target="_blank" rel="noopener">vercel.com</a> → <span class="ui">Continue with GitHub</span>. Don't make a separate password; linking the two is the whole point.</li>
+          </ol>
+          <p>You won't use either of these until Section 09. Make them now so nothing blocks you later.</p>
+        </div>
+      </div>
+
+      <h3>Check that it all worked</h3>
+      <p>Open VS Code, open its terminal (next section explains how; for now: <kbd>⌃</kbd><kbd>`</kbd>), and type each line. Each should print a version number, not <em>command not found</em>.</p>
+      <div class="term">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">zsh</span><button type="button" data-copy="node -v
+npm -v
+git --version
+code --version">Copy</button></div>
+<pre><span class="p">% </span><span class="c">node -v</span>
+<span class="o">v24.20.0</span>
+<span class="p">% </span><span class="c">npm -v</span>
+<span class="o">11.6.2</span>
+<span class="p">% </span><span class="c">git --version</span>
+<span class="o">git version 2.50.1</span>
+<span class="p">% </span><span class="c">code --version</span>
+<span class="o">1.104.0</span>
+<span class="m"># your numbers will differ. any number is a pass.</span></pre>
+      </div>
+    </section>
+
+    <!-- ============ 03 ============ -->
+    <section id="s3">
+      <h2><span class="n">03</span>The terminal</h2>
+      <p>A terminal is a text box. You type a command, press return, and the computer does the thing and prints what happened. That's all it is. It feels hostile because it doesn't explain itself, but it never does anything you didn't type.</p>
+
+      <div class="step"><input type="checkbox" id="step-term-open" data-step="term-open" aria-labelledby="h-term-open">
+        <div class="body">
+          <h3>Open it inside VS Code</h3>
+          <p>Press <kbd>⌃</kbd><kbd>`</kbd>. That's <strong>Control</strong> (the key labeled <em>control</em>, not Command) plus the backtick key, which is the one directly under <kbd>esc</kbd> on a Mac keyboard. Press it again to hide the terminal. <kbd>⌃</kbd><kbd>⇧</kbd><kbd>`</kbd> opens a second terminal beside the first.</p>
+          <p>If the shortcut doesn't fire, use the menu: <span class="ui">Terminal → New Terminal</span>.</p>
+          <p class="why">Why VS Code's terminal and not the Terminal app: VS Code's terminal opens <em>already inside the folder you have open</em>. Commands act on whatever folder you're “in,” so this saves you from the most common beginner problem, which is running a command in the wrong place.</p>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-term-read" data-step="term-read" aria-labelledby="h-term-read">
+        <div class="body">
+          <h3>Read the prompt</h3>
+          <p>The line waiting for you looks something like this:</p>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">zsh</span></div>
+<pre><span class="o">alex@Alexs-MacBook-Air portfolio % </span><span class="c">▍</span></pre>
+          </div>
+          <p>Your username, your computer's name, and then the folder you're currently in (<code>portfolio</code>), then a <code>%</code>. Everything after the <code>%</code> is what you type. The folder name is the important part: it tells you where commands will run.</p>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-term-cmds" data-step="term-cmds" aria-labelledby="h-term-cmds">
+        <div class="body">
+          <h3>The seven things you'll actually do</h3>
+          <div class="tbl-wrap">
+          <table class="tbl">
+            <thead><tr><th>Type</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td><code>pwd</code></td><td>Print the full path of the folder you're in. “Where am I?”</td></tr>
+              <tr><td><code>ls</code></td><td>List what's in this folder.</td></tr>
+              <tr><td><code>cd portfolio</code></td><td>Move into the folder called <code>portfolio</code>. <code>cd ..</code> moves up one level.</td></tr>
+              <tr><td><code>clear</code></td><td>Wipe the screen. Changes nothing.</td></tr>
+              <tr><td><kbd>⌃</kbd><kbd>C</kbd></td><td>Stop whatever is running. This is how you stop the dev server.</td></tr>
+              <tr><td><kbd>↑</kbd></td><td>Bring back the last command you typed. Press again for older ones.</td></tr>
+              <tr><td><kbd>Tab</kbd></td><td>Autocomplete a folder or file name. Type <code>cd por</code>, hit Tab, get <code>cd portfolio/</code>.</td></tr>
+            </tbody>
+          </table>
+          </div>
+          <p>Copy and paste work normally (<kbd>⌘</kbd><kbd>C</kbd> / <kbd>⌘</kbd><kbd>V</kbd>). Every code block in this guide has a Copy button; paste it into the terminal and press return.</p>
+          <div class="warn">
+            <p><b>Two rules.</b> Never paste a command you don't understand from a random website; ask Claude or Vinson what it does first. And if a command asks for your password, that's <code>sudo</code>, and you almost certainly don't need it this week. Stop and ask.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 04 ============ -->
+    <section id="s4">
+      <h2><span class="n">04</span>npm</h2>
+      <p>npm is an app store for code, without the storefront. Instead of clicking Install you type <code>npm install something</code>, and it downloads that package into your project. Every modern web project is assembled from hundreds of these packages; Next.js is one, React is one, Tailwind is one.</p>
+
+      <h3>The two files that matter</h3>
+      <p><code>package.json</code> is the shopping list. It names your project, lists the packages it depends on, and defines named <strong>scripts</strong> (shortcuts like <code>dev</code> and <code>build</code>). It's small, human-readable, and gets committed to Git.</p>
+      <p><code>node_modules/</code> is the delivered boxes. It's where npm actually puts the downloaded code. It's enormous (tens of thousands of files), it's automatically excluded from Git, and you <strong>never edit anything in it</strong>. If it gets weird, delete the whole folder and run <code>npm install</code>; it comes back identical.</p>
+
+      <h3>The four commands</h3>
+      <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>Command</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>npm install</code></td><td>Download everything on the shopping list. Run this after cloning a project or when someone says “did you install?”</td></tr>
+          <tr><td><code>npm install @tanstack/react-query</code></td><td>Add one package to the list <em>and</em> download it.</td></tr>
+          <tr><td><code>npx create-next-app@latest</code></td><td>Run a tool once without keeping it. <code>npx</code> fetches the tool, runs it, done. (This is the tool that made the template you're about to download.)</td></tr>
+          <tr><td><code>npm run dev</code></td><td>Run the script named <code>dev</code> from <code>package.json</code>. Same for <code>npm run build</code>.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="why">The line in the terminal after <code>npm install</code> that says “added 340 packages” is normal. So is a wall of text. Read the last two lines; that's where problems show up.</p>
+    </section>
+
+    <!-- ============ 05 ============ -->
+    <section id="s5">
+      <h2><span class="n">05</span>Get the project</h2>
+      <p>You are not starting from a blank folder. Vinson built a <strong>template repository</strong>: the site's skeleton, the design tokens, one sample case study, and this guide. You make your own copy of it on GitHub, download that copy to your Mac, and install its packages. Three steps, then you never think about it again.</p>
+
+      <div class="step"><input type="checkbox" id="step-proj-folder" data-step="proj-folder" aria-labelledby="h-proj-folder">
+        <div class="body">
+          <h3>Decide where it lives</h3>
+          <p>Make a <code>Projects</code> folder in your home directory and work inside it. Not Desktop, not Downloads, not iCloud Drive (iCloud syncing <code>node_modules</code> will make your Mac miserable).</p>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">zsh</span><button type="button" data-copy="mkdir -p ~/Projects
+cd ~/Projects">Copy</button></div>
+<pre><span class="p">% </span><span class="c">mkdir -p ~/Projects</span>
+<span class="p">% </span><span class="c">cd ~/Projects</span>
+<span class="m"># ~ means your home folder. mkdir makes a folder. cd moves into it.</span></pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-proj-template" data-step="proj-template" aria-labelledby="h-proj-template">
+        <div class="body">
+          <h3>Make your own copy on GitHub</h3>
+          <ol>
+            <li>Open the template: <a href="{{TEMPLATE_REPO}}" target="_blank" rel="noopener">{{TEMPLATE_REPO_LABEL}}</a>. Sign in to GitHub if it asks.</li>
+            <li>Click the green <span class="ui">Use this template</span> button, then <span class="ui">Create a new repository</span>.</li>
+            <li><span class="ui">Owner</span>: you. <span class="ui">Repository name</span>: <code>portfolio</code>. Public or private, either works. Click <span class="ui">Create repository</span>.</li>
+            <li>You now have <code>github.com/<em>your-username</em>/portfolio</code>. It has one commit, and it's entirely yours.</li>
+          </ol>
+          <div class="note">
+            <p><strong>Why not fork or clone Vinson's repo directly?</strong> A fork stays tied to his; a plain clone of his repo gives you nowhere to push. <span class="ui">Use this template</span> gives you a fresh repository with a clean history that belongs to you, which is what Vercel needs in Section 09.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-proj-clone" data-step="proj-clone" aria-labelledby="h-proj-clone">
+        <div class="body">
+          <h3>Download it to your Mac (this is called cloning)</h3>
+          <p>Do this from inside VS Code the first time, so VS Code handles the GitHub sign-in for you and you never have to deal with tokens.</p>
+          <ol>
+            <li>Open VS Code. Press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>P</kbd>, type <em>git clone</em>, choose <span class="ui">Git: Clone</span>.</li>
+            <li>Choose <span class="ui">Clone from GitHub</span>. A browser window asks you to authorize VS Code. Approve it and come back.</li>
+            <li>Type <em>portfolio</em> and pick <span class="ui">your-username/portfolio</span> from the list.</li>
+            <li>When it asks where to put it, pick the <span class="ui">Projects</span> folder you just made. Click <span class="ui">Select as Repository Destination</span>.</li>
+            <li>VS Code asks <span class="ui">Would you like to open the cloned repository?</span> Click <span class="ui">Open</span>. If it asks whether you trust the authors, click <span class="ui">Yes, I trust the authors</span>. You are the author now.</li>
+          </ol>
+          <p>The same thing, as a terminal command, for next time or for a second computer:</p>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">zsh · ~/Projects</span><button type="button" data-copy="git clone https://github.com/YOUR-USERNAME/portfolio.git
+cd portfolio
+code .">Copy</button></div>
+<pre><span class="p">% </span><span class="c">git clone https://github.com/YOUR-USERNAME/portfolio.git</span>
+<span class="o">Cloning into 'portfolio'...</span>
+<span class="p">% </span><span class="c">cd portfolio</span>
+<span class="p">% </span><span class="c">code .</span>
+<span class="m"># "code" = VS Code, "." = this folder. A new VS Code window opens on the project.</span></pre>
+          </div>
+          <p>From here on, do everything in that VS Code window. Open its terminal with <kbd>⌃</kbd><kbd>`</kbd> and notice the prompt already says <code>portfolio</code>.</p>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-proj-install" data-step="proj-install" aria-labelledby="h-proj-install">
+        <div class="body">
+          <h3>Install the packages</h3>
+          <p>The repo has the shopping list (<code>package.json</code>) but not the boxes (<code>node_modules</code>); Git never stores those. One command downloads them.</p>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">zsh · portfolio</span><button type="button" data-copy="npm install">Copy</button></div>
+<pre><span class="p">% </span><span class="c">npm install</span>
+<span class="o">added 400 packages, and audited 401 packages in 25s</span>
+<span class="o">found 0 vulnerabilities</span>
+<span class="m"># the numbers will differ. a wall of text is normal. read the last two lines.</span></pre>
+          </div>
+          <p>A <code>node_modules</code> folder appears in the file tree. That's the delivered boxes. You never open it.</p>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-proj-tanstack" data-step="proj-tanstack" aria-labelledby="h-proj-tanstack">
+        <div class="body">
+          <h3>Add TanStack Query</h3>
+          <p>One more package, and your first time adding one yourself. You won't use it until you build an interactive prototype that fetches data, but adding it now means Claude can reach for it when the time comes.</p>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">zsh · portfolio</span><button type="button" data-copy="npm install @tanstack/react-query">Copy</button></div>
+<pre><span class="p">% </span><span class="c">npm install @tanstack/react-query</span>
+<span class="o">added 3 packages in 2s</span></pre>
+          </div>
+          <p>Open <code>package.json</code> in the file tree. You'll see <code>@tanstack/react-query</code> now listed under <code>dependencies</code>. That's the shopping list updating itself.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 06 ============ -->
+    <section id="s6">
+      <h2><span class="n">06</span>Run it</h2>
+      <p>A Next.js project has three modes, and each is one npm script. You'll live in the first one.</p>
+
+      <div class="step"><input type="checkbox" id="step-run-dev" data-step="run-dev" aria-labelledby="h-run-dev">
+        <div class="body">
+          <h3><code>npm run dev</code> — the dev server</h3>
+          <p>Starts a tiny web server on your Mac that serves your site and rebuilds it every time you save a file. This is the thing that makes vibe coding work: Claude edits, you save (or it saves), the browser updates within a second.</p>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">zsh · portfolio</span><button type="button" data-copy="npm run dev">Copy</button></div>
+<pre><span class="p">% </span><span class="c">npm run dev</span>
+
+<span class="o">  ▲ Next.js 16.3.4 (Turbopack)
+  - Local:        http://localhost:3000
+  - Network:      http://192.168.1.24:3000</span>
+
+<span class="ok"> ✓ Ready in 900ms</span></pre>
+          </div>
+          <ol>
+            <li><kbd>⌘</kbd>-click <code>http://localhost:3000</code> in the terminal, or type it into Chrome. You'll see the portfolio homepage with a placeholder name on it. That placeholder is the first thing you'll replace.</li>
+            <li>In VS Code, open <code>content/site.ts</code>. Change the <code>tagline</code> text, press <kbd>⌘</kbd><kbd>S</kbd>. Look at the browser. That's the loop.</li>
+            <li>The terminal now looks “stuck.” It isn't; the server is running and waiting. Leave it. Open a second terminal with <kbd>⌃</kbd><kbd>⇧</kbd><kbd>`</kbd> for other commands.</li>
+            <li>To stop it: click in that terminal and press <kbd>⌃</kbd><kbd>C</kbd>. To start again: <kbd>↑</kbd> then return.</li>
+          </ol>
+          <p class="why"><code>localhost</code> means “this computer.” <code>3000</code> is the port, a numbered door. Nobody else can see it; it's your private preview. The <em>Network</em> line lets a phone on the same Wi-Fi see it, which is how you'll check mobile without deploying.</p>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-run-build" data-step="run-build" aria-labelledby="h-run-build">
+        <div class="body">
+          <h3><code>npm run build</code> — the production build</h3>
+          <p>Compiles the whole site into its final, optimized form: the exact thing Vercel will serve to the public. It also refuses to complete if anything is broken, which makes it your pre-flight check.</p>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">zsh · portfolio</span><button type="button" data-copy="npm run build">Copy</button></div>
+<pre><span class="p">% </span><span class="c">npm run build</span>
+<span class="o">  ▲ Next.js 16.3.4 (Turbopack)
+
+  Creating an optimized production build ...</span>
+<span class="ok"> ✓ Compiled successfully</span>
+<span class="o">
+ Route (app)                    Size   First Load JS
+ ┌ ○ /                        5.2 kB        102 kB
+ └ ○ /_not-found                0 B          97 kB
+
+ ○  (Static)  prerendered as static content</span></pre>
+          </div>
+          <p><strong>Run this before every push you'd show someone.</strong> If it ends in red, the site is broken and Vercel's deploy will fail too. Copy the error, paste it to Claude, fix, build again. Green build → safe to push.</p>
+          <p class="why">The table it prints is real information: every page of your site and how much code the browser has to download to show it. When a case-study page balloons because of a huge image, you'll see it here first.</p>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-run-start" data-step="run-start" aria-labelledby="h-run-start">
+        <div class="body">
+          <h3><code>npm run start</code> — preview the build</h3>
+          <p>Serves the output of <code>npm run build</code> exactly as production would, at the same <code>localhost:3000</code>. No hot-reloading, no dev overlays. Use it rarely, when something behaves differently on Vercel than it did in dev. Stop it with <kbd>⌃</kbd><kbd>C</kbd> and go back to <code>npm run dev</code>.</p>
+        </div>
+      </div>
+
+      <h3>Where these come from</h3>
+      <p>Open <code>package.json</code>. The <code>scripts</code> block is the menu. <code>npm run &lt;name&gt;</code> runs the line next to that name. That's the entire mechanism.</p>
+      <div class="term">
+        <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">package.json</span></div>
+<pre><span class="o">"scripts": {
+  "dev":   "next dev",
+  "build": "next build",
+  "start": "next start",
+  "lint":  "eslint"
+}</span></pre>
+      </div>
+    </section>
+
+    <!-- ============ 07 ============ -->
+    <section id="s7">
+      <h2><span class="n">07</span>What's in the folder</h2>
+      <p>This is the part Squarespace hides from you. It's also the part that makes you employable: the ability to look at a modern project and know where things go. Here's what's in the template, and what each piece is for.</p>
+
+      <div class="tree">portfolio/
+├── <span class="d">app/</span>                  <span class="cm">← your pages. every folder here is a URL</span>
+│   ├── layout.tsx        <span class="cm">← the frame around every page: fonts, header, footer</span>
+│   ├── page.tsx          <span class="cm">← the homepage. what shows at /</span>
+│   ├── globals.css       <span class="cm">← design tokens (colors, type scale) + the Tailwind import</span>
+│   ├── <span class="d">about/</span>page.tsx    <span class="cm">← /about</span>
+│   ├── <span class="d">work/</span>page.tsx     <span class="cm">← /work, the index of case studies</span>
+│   ├── <span class="d">work/[slug]/</span>page.tsx <span class="cm">← one case study. [slug] = a file name in content/work/</span>
+│   └── <span class="d">guide/</span>page.tsx    <span class="cm">← this guide. delete the folder when you're done with it</span>
+├── <span class="d">components/</span>           <span class="cm">← reusable pieces: header, footer, case-study sections, slide deck</span>
+├── <span class="d">content/</span>              <span class="cm">← YOUR WORDS. the folder you'll edit most</span>
+│   ├── site.ts           <span class="cm">← your name, role, email, links</span>
+│   ├── about.mdx         <span class="cm">← the about page</span>
+│   └── <span class="d">work/</span>             <span class="cm">← one .mdx file per case study. add a file, get a page</span>
+│       ├── portfolio-crash-course.mdx  <span class="cm">← the sample. delete it when you have real ones</span>
+│       └── _TEMPLATE.mdx <span class="cm">← copy this to start a new case study</span>
+├── <span class="d">lib/</span>                  <span class="cm">← code that reads content/ and turns it into pages</span>
+├── <span class="d">public/</span>               <span class="cm">← images and files served as-is. public/me.jpg → /me.jpg</span>
+├── <span class="d">docs/</span>                 <span class="cm">← Vinson's notes on how the template was built</span>
+├── <span class="dim">node_modules/</span>         <span class="cm">← downloaded packages. never edit, never commit</span>
+├── <span class="dim">.next/</span>                <span class="cm">← build output, appears after you run. ignore it</span>
+├── package.json          <span class="cm">← the shopping list + scripts</span>
+├── package-lock.json     <span class="cm">← exact versions of everything. don't touch, do commit</span>
+├── next.config.ts        <span class="cm">← Next.js settings. mostly empty</span>
+├── tsconfig.json         <span class="cm">← TypeScript settings. leave it</span>
+├── postcss.config.mjs    <span class="cm">← wires Tailwind in. leave it</span>
+├── eslint.config.mjs     <span class="cm">← code-quality rules. leave it</span>
+├── .gitignore            <span class="cm">← tells Git to skip node_modules and .next</span>
+├── AGENTS.md             <span class="cm">← rules for AI agents working in this repo</span>
+├── CLAUDE.md             <span class="cm">← what Claude Code reads first. your design system, in words</span>
+└── README.md</div>
+
+      <h3>How a URL becomes a file</h3>
+      <p>This is called file-based routing and it's the single most useful thing to understand. You don't configure URLs anywhere. You make a folder inside <code>app/</code> with a <code>page.tsx</code> in it, and that folder's name is the URL. Case studies go one step further: <code>app/work/[slug]/page.tsx</code> is a single page that reads <code>content/work/</code>, so every <code>.mdx</code> file you add there becomes its own URL with no code change.</p>
+      <div class="routes">
+        <span>app/page.tsx</span><span class="arrow">→</span><span class="url">yoursite.com/</span>
+        <span>app/about/page.tsx</span><span class="arrow">→</span><span class="url">yoursite.com/about</span>
+        <span>app/work/page.tsx</span><span class="arrow">→</span><span class="url">yoursite.com/work</span>
+        <span>content/work/onboarding-redesign.mdx</span><span class="arrow">→</span><span class="url">yoursite.com/work/onboarding-redesign</span>
+      </div>
+      <p><code>layout.tsx</code> wraps every page beneath it. The root one in <code>app/</code> is where your nav, footer, and fonts go once, so every page gets them. When you tell Claude “add a nav,” it goes there.</p>
+
+      <h3>Components: Figma components, but real</h3>
+      <p>A component is a reusable piece of UI: a project card, a button, the case-study hero. They live in the <code>components/</code> folder; the header, footer, case-study sections, and slide deck are already there. A page is just a layout of components with content dropped in. If you've built a Figma library, you already think this way.</p>
+
+      <h3>Styling: Tailwind</h3>
+      <p>Tailwind is CSS as class names, written directly on the element: <code>class="text-lg font-semibold text-neutral-900"</code>. It looks noisy at first. The reason it's the standard for agent-built sites is that every style is visible right where it's used, so Claude can read and change it without hunting through separate CSS files. Your design tokens (type scale, spacing, colors) get declared once in <code>globals.css</code> and referenced everywhere.</p>
+
+      <h3>How it ships</h3>
+      <div class="pipe">
+        <div class="box"><b>your files</b><span>app/, components/, public/</span></div>
+        <span class="ar">→</span>
+        <div class="box"><b>git push</b><span>to GitHub</span></div>
+        <span class="ar">→</span>
+        <div class="box"><b>Vercel runs npm run build</b><span>same command you ran</span></div>
+        <span class="ar">→</span>
+        <div class="box"><b>live site</b><span>on a global CDN, ~60 seconds</span></div>
+      </div>
+      <p class="why">There's no “upload” step and no FTP. Push to GitHub is the deploy. That's the modern architecture in one sentence: source of truth in Git, hosting that rebuilds from it automatically.</p>
+    </section>
+
+    <!-- ============ 08 ============ -->
+    <section id="s8">
+      <h2><span class="n">08</span>Claude Code in VS Code</h2>
+      <p>The panel is where you'll spend most of the week. Here's how to work it well.</p>
+
+      <div class="step"><input type="checkbox" id="step-cc-open" data-step="cc-open" aria-labelledby="h-cc-open">
+        <div class="body">
+          <h3>Open it and set the mode</h3>
+          <ol>
+            <li>Click the ✱ spark icon (top-right of the editor with a file open, or in the left Activity Bar). Or press <kbd>⌘</kbd><kbd>Esc</kbd>, which toggles focus between your code and Claude's prompt box.</li>
+            <li>At the bottom of the prompt box is a <strong>permission mode</strong> indicator. On Pro and Max it starts in <span class="ui">Auto</span>, where Claude applies most edits without asking. Click it and switch to <span class="ui">Manual</span> for this week.</li>
+          </ol>
+          <p class="why">In Manual mode, every edit shows you a side-by-side diff and asks before applying. That's slower and it's exactly what you want while learning: you see every change, you can reject it, and you start recognizing what the code for “a card grid” looks like. Switch to Auto in a couple of weeks once the diffs stop being interesting.</p>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-cc-context" data-step="cc-context" aria-labelledby="h-cc-context">
+        <div class="body">
+          <h3>Give it what to look at</h3>
+          <ul>
+            <li><strong>@-mention files.</strong> Type <code>@</code> and a file name (<code>@page.tsx</code>) and Claude reads it. Fuzzy matching works; partial names are fine.</li>
+            <li><strong>Select code, press <kbd>⌥</kbd><kbd>K</kbd>.</strong> Inserts a reference to exactly those lines. “Make <code>@page.tsx#12-30</code> a 3-column grid on desktop.”</li>
+            <li><strong>Hold <kbd>⇧</kbd> and drag files into the prompt box</strong> to attach them. This is how you hand Claude a Figma export or a screenshot of what's wrong. Do this constantly. A screenshot beats three sentences.</li>
+            <li><strong>Type <code>/</code></strong> for the command menu: attach files, switch model, toggle extended thinking, manage plugins.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-cc-rewind" data-step="cc-rewind" aria-labelledby="h-cc-rewind">
+        <div class="body">
+          <h3>Undo with rewind</h3>
+          <p>Hover over any message in the conversation and a rewind button appears. <span class="ui">Rewind code to here</span> puts every file back the way it was at that point. This is your safety net before you're fluent with Git. Try it once on purpose so you trust it.</p>
+          <p>The <span class="ui">Session history</span> button at the top of the panel lists past conversations; click one to resume it with full context.</p>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-cc-first" data-step="cc-first" aria-labelledby="h-cc-first">
+        <div class="body">
+          <h3>Your first prompt</h3>
+          <p>With <code>npm run dev</code> running in the terminal and <code>localhost:3000</code> open in Chrome, type this into Claude (fill in the brackets) and watch the browser:</p>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">Claude Code</span><button type="button" data-copy="Read CLAUDE.md first. Then open content/site.ts and replace the
+placeholder name, role, tagline, and email with mine:
+[your name], [your role], [one line about what you do], [your email].
+Don't touch anything else. Tell me which files you changed.">Copy</button></div>
+<pre><span class="o">Read CLAUDE.md first. Then open content/site.ts and replace the
+placeholder name, role, tagline, and email with mine:
+[your name], [your role], [one line about what you do], [your email].
+Don't touch anything else. Tell me which files you changed.</span></pre>
+          </div>
+          <p>You'll get a diff. Read it, even if you don't understand all of it. Accept. Look at the browser: the header and the hero now say your name. That's the loop from the deck; you just ran it once.</p>
+        </div>
+      </div>
+
+      <h3>Extension now, terminal version later</h3>
+      <p>The terminal version of Claude Code (the CLI) is the same agent with a text interface. It has a few things the panel doesn't: every slash command, tab completion, a <code>!</code> shortcut for running shell commands, and easier setup for connecting external tools. Power users tend to end up there.</p>
+      <p>You are not a power user yet, and the extension is a better teacher: diffs you can see, rewind you can click, screenshots you can drag. Every terminal skill you build this week transfers directly; when the CLI is worth it, it's one install and typing <code>claude</code> in the terminal you already use. Both share the same conversation history, so nothing is lost by starting here. Give it two or three weeks in the panel first.</p>
+    </section>
+
+    <!-- ============ 09 ============ -->
+    <section id="s9">
+      <h2><span class="n">09</span>First push, first deploy</h2>
+      <p>The deck covers the five Git commands you'll use daily. This section is only the <em>first time</em>, which has one extra step: connecting Vercel. Do it on Day 1, before anything looks good. A live URL that says “hello” is worth more than a perfect site that's still on your laptop.</p>
+
+      <div class="step"><input type="checkbox" id="step-git-publish" data-step="git-publish" aria-labelledby="h-git-publish">
+        <div class="body">
+          <h3>Your first push</h3>
+          <p>Because you created the repository from the template in Section 05, it already exists on GitHub and your clone is connected to it. Nothing to publish. Prove it, then send up the name change you made in Section 08:</p>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">zsh · portfolio</span><button type="button" data-copy="git remote -v
+git add .
+git commit -m &quot;my name and role&quot;
+git push">Copy</button></div>
+<pre><span class="p">% </span><span class="c">git remote -v</span>
+<span class="o">origin  https://github.com/YOUR-USERNAME/portfolio.git (fetch)</span>
+<span class="o">origin  https://github.com/YOUR-USERNAME/portfolio.git (push)</span>
+<span class="p">% </span><span class="c">git add .</span>
+<span class="p">% </span><span class="c">git commit -m "my name and role"</span>
+<span class="p">% </span><span class="c">git push</span>
+<span class="m"># first time, VS Code may pop a GitHub sign-in. approve it.</span></pre>
+          </div>
+          <p>Refresh github.com. Your commit is there. From now on, that's the loop: <code>git add .</code>, <code>git commit -m "…"</code>, <code>git push</code>.</p>
+        </div>
+      </div>
+      <div class="step"><input type="checkbox" id="step-vercel" data-step="vercel" aria-labelledby="h-vercel">
+        <div class="body">
+          <h3>Connect Vercel</h3>
+          <ol>
+            <li>vercel.com → <span class="ui">Add New…</span> → <span class="ui">Project</span>.</li>
+            <li>Find <code>portfolio</code> in the list of your GitHub repos → <span class="ui">Import</span>. (First time, it'll ask to install the Vercel app on your GitHub account. Allow it.)</li>
+            <li>It detects Next.js automatically. Change nothing. Click <span class="ui">Deploy</span>.</li>
+            <li>About a minute later: a URL like <code>portfolio-abc123.vercel.app</code>. Open it on your phone. It's real.</li>
+          </ol>
+          <p>From now on, every <code>git push</code> triggers a new deploy. You'll get an email if a build fails, and the Vercel dashboard shows the same error <code>npm run build</code> would have shown you locally. Which is why you run that first.</p>
+        </div>
+      </div>
+
+      <div class="step"><input type="checkbox" id="step-daily-loop" data-step="daily-loop" aria-labelledby="h-daily-loop">
+        <div class="body">
+          <h3>The daily loop, end to end</h3>
+          <div class="term">
+            <div class="bar"><span class="dots"><i></i><i></i><i></i></span><span class="title">zsh · portfolio</span><button type="button" data-copy="npm run dev">Copy</button></div>
+<pre><span class="p">% </span><span class="c">npm run dev</span>                      <span class="m"># morning. leave it running</span>
+<span class="m">  … work with Claude in the panel, look at localhost:3000 …</span>
+<span class="p">% </span><span class="c">npm run build</span>                    <span class="m"># in the second terminal, before pushing</span>
+<span class="p">% </span><span class="c">git add .</span>
+<span class="p">% </span><span class="c">git commit -m "homepage hero and project cards"</span>
+<span class="p">% </span><span class="c">git push</span>                         <span class="m"># vercel deploys. check the url on your phone</span></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 10 ============ -->
+    <section id="s10">
+      <h2><span class="n">10</span>When something breaks</h2>
+      <p>It will. Almost all of it is one of these. Read the <em>first</em> line of any error; the rest is usually noise.</p>
+      <div class="tbl-wrap">
+      <table class="tbl">
+        <thead><tr><th>You see</th><th>What it means · what to do</th></tr></thead>
+        <tbody>
+          <tr><td><code>zsh: command not found: node</code></td><td>Node isn't installed, or this terminal was opened before you installed it. Quit VS Code fully (<kbd>⌘</kbd><kbd>Q</kbd>) and reopen. Still failing → reinstall Node from nodejs.org.</td></tr>
+          <tr><td><code>command not found: code</code></td><td>You skipped the <em>Install 'code' command in PATH</em> step. <kbd>⌘</kbd><kbd>⇧</kbd><kbd>P</kbd> → <em>shell command</em>.</td></tr>
+          <tr><td><code>Cannot find module …</code></td><td>Packages are missing. Run <code>npm install</code> in the project folder.</td></tr>
+          <tr><td><code>Port 3000 is in use</code></td><td>A dev server is already running in another terminal. Next.js will just use 3001; either is fine. Or find the other terminal and <kbd>⌃</kbd><kbd>C</kbd> it.</td></tr>
+          <tr><td><code>npm ERR! … ENOENT … package.json</code></td><td>You're in the wrong folder. Type <code>pwd</code>. <code>cd</code> into <code>portfolio</code>.</td></tr>
+          <tr><td><code>EACCES: permission denied</code></td><td>You tried to install something globally. You don't need to this week. Don't use <code>sudo</code>; ask what you were trying to do.</td></tr>
+          <tr><td>Red error overlay in the browser</td><td>A code error in the file you just changed. Copy the first line, paste it to Claude with “fix this,” or click rewind.</td></tr>
+          <tr><td>Browser shows old content</td><td>File isn't saved (look for a dot on the tab; <kbd>⌘</kbd><kbd>S</kbd>), or the dev server crashed. Check the terminal for red text; restart with <code>npm run dev</code>.</td></tr>
+          <tr><td>Terminal looks frozen</td><td>The dev server is running. That's the job. Open a second terminal (<kbd>⌃</kbd><kbd>⇧</kbd><kbd>`</kbd>).</td></tr>
+          <tr><td>Vercel build failed</td><td>Run <code>npm run build</code> locally. Same error, easier to read. Fix, push again.</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <div class="warn">
+        <p><b>When stuck for more than ten minutes:</b> screenshot the terminal, screenshot the browser, drop both into Claude with “what's wrong and what should I type?” Then text Vinson. In that order.</p>
+      </div>
+    </section>
+
+    <!-- ============ 11 ============ -->
+    <section id="s11">
+      <h2><span class="n">11</span>Words you'll hear</h2>
+      <dl class="gloss">
+        <dt>terminal</dt><dd>The text box where you type commands. The program running inside it on a Mac is called zsh, the “shell.”</dd>
+        <dt>command</dt><dd>One line you type and run. <code>npm run dev</code> is a command.</dd>
+        <dt>PATH</dt><dd>The list of places your Mac looks for programs when you type their name. “command not found” means it's not on the PATH.</dd>
+        <dt>Node.js</dt><dd>Runs JavaScript on your Mac instead of in a browser. Next.js and npm both need it.</dd>
+        <dt>npm</dt><dd>Downloads packages into your project. Comes with Node.</dd>
+        <dt>npx</dt><dd>Runs a package once without installing it.</dd>
+        <dt>package</dt><dd>A chunk of someone else's code you download and use. Also called a dependency.</dd>
+        <dt>package.json</dt><dd>Your project's manifest: name, dependencies, scripts.</dd>
+        <dt>node_modules</dt><dd>Where downloaded packages live. Huge, ignored by Git, regenerable.</dd>
+        <dt>script</dt><dd>A named command in package.json. Run with <code>npm run name</code>.</dd>
+        <dt>dev server</dt><dd>The local server that shows your site and reloads on save.</dd>
+        <dt>localhost</dt><dd>This computer. <code>localhost:3000</code> = this computer, door 3000.</dd>
+        <dt>build</dt><dd>Compiling your source into the optimized files a real server sends to visitors.</dd>
+        <dt>deploy</dt><dd>Putting a build on the internet. Vercel does it on every push.</dd>
+        <dt>repo</dt><dd>Short for repository. A project folder tracked by Git, locally or on GitHub.</dd>
+        <dt>commit</dt><dd>A named save point in Git.</dd>
+        <dt>push</dt><dd>Sending your commits to GitHub.</dd>
+        <dt>framework</dt><dd>The structure your site is built inside. Next.js is a framework built on React.</dd>
+        <dt>React</dt><dd>The library that lets you build UI out of components. You won't write it; Claude will.</dd>
+        <dt>component</dt><dd>A reusable piece of UI. A card, a nav, a button.</dd>
+        <dt>route</dt><dd>A URL. In Next.js, a folder in <code>app/</code> with a <code>page.tsx</code>.</dd>
+        <dt>Tailwind</dt><dd>Styling via class names on elements instead of separate CSS files.</dd>
+        <dt>TypeScript</dt><dd>JavaScript with type checking. Catches mistakes early. Invisible to you.</dd>
+        <dt>CLAUDE.md</dt><dd>A file Claude Code reads at the start of every session. Your project's rules go here.</dd>
+        <dt>CLI</dt><dd>Command-line interface: a program you use by typing. The terminal version of Claude Code is “the CLI.”</dd>
+      </dl>
+    </section>
+
+    <p class="foot">Written for the seven-day portfolio crash course. Next.js 16 · Node 22+ · Claude Code VS Code extension. This copy lives inside the portfolio repo at <code>content/guide/</code>; delete <code>app/guide/</code> when you no longer need it. Shortcuts are macOS. If anything here disagrees with what your screen shows, your screen wins; the tools update faster than guides do.</p>
+  </div>
+</div>

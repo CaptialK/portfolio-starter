@@ -1,26 +1,185 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ===========================================================================
+   DESIGN TOKENS
+   ---------------------------------------------------------------------------
+   This file is the CSS half of your design system. CLAUDE.md is the English
+   half. When you change a value here, change the matching line in CLAUDE.md so
+   Claude Code keeps building to the same rules.
+
+   Everything below is a PLACEHOLDER. Replacing these values with your own
+   scale from Figma is the single highest-leverage change you can make to this
+   template. Do it on Day 3.
+   ========================================================================= */
+
+@theme {
+  /* --- Color. One background, one text color, one accent. That's the rule. */
+  --color-bg: #0e0e0e;
+  --color-panel: #151515;
+  --color-ink: #f2f2ee;
+  --color-muted: #8f8f88;
+  --color-line: #262624;
+  --color-accent: #d4ff3a;
+  --color-accent-ink: #0e0e0e;
+
+  /* --- Type. Two families: one for headings, one for everything else. */
+  --font-sans: var(--font-grotesk), "Helvetica Neue", Arial, sans-serif;
+  --font-display: var(--font-serif), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-mono-code), ui-monospace, SFMono-Regular, monospace;
+
+  /* --- Type scale: 5 sizes plus a display size. Named, not invented per-use. */
+  --text-xs: 0.875rem; /* 14px - captions, labels, meta */
+  --text-sm: 1rem; /* 16px - body */
+  --text-md: 1.25rem; /* 20px - lede, large body */
+  --text-lg: 1.75rem; /* 28px - section headings */
+  --text-xl: 2.75rem; /* 44px - page headings */
+  --text-2xl: 4rem; /* 64px - the one big statement per page */
+
+  --text-xs--line-height: 1.5;
+  --text-sm--line-height: 1.65;
+  --text-md--line-height: 1.55;
+  --text-lg--line-height: 1.2;
+  --text-xl--line-height: 1.08;
+  --text-2xl--line-height: 1.02;
+
+  /* --- Spacing scale: 4 / 8 / 16 / 24 / 48 / 96. Use these, not arbitrary px. */
+  --spacing-step-1: 0.25rem;
+  --spacing-step-2: 0.5rem;
+  --spacing-step-3: 1rem;
+  --spacing-step-4: 1.5rem;
+  --spacing-step-5: 3rem;
+  --spacing-step-6: 6rem;
+
+  /* --- Measure. Body text never gets wider than this. */
+  --container-measure: 42rem; /* ~68 characters */
+  --container-page: 72rem;
+
+  /* --- Elevation. One shadow, used only on a surface that lifts on hover.
+         Not a colour: it's the page's own black at low opacity, so it works
+         on `bg` and on `panel` without introducing anything to the palette. */
+  --shadow-lift: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px rgb(0 0 0 / 0.45);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    background-color: var(--color-bg);
+    color-scheme: dark;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Headings use the display face and hang slightly tighter than the body. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+
+  /* A visible, high-contrast focus ring everywhere. Keyboard users are on the
+     reject list in the deck; this is how you pass that check by default. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+
+  /* Respect the setting. Anything animated must survive this being on. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Skip link: visible only once focused. */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: 0;
+    z-index: 100;
+  }
+  .skip-link:focus {
+    left: var(--spacing-step-3);
+    top: var(--spacing-step-3);
+    padding: var(--spacing-step-2) var(--spacing-step-3);
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+
+  /* One decorative texture, used sparingly: a faint rule grid behind heroes.
+
+     The grid lives on a ::before layer rather than on the element itself. A
+     mask-image applies to an element's content as well as its background, so
+     putting it directly on .bg-grid would fade out the words in the hero. */
+  .bg-grid {
+    position: relative;
+    isolation: isolate;
+  }
+  .bg-grid::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image:
+      linear-gradient(to right, var(--color-line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--color-line) 1px, transparent 1px);
+    background-size: 6rem 6rem;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%);
+  }
+
+  /* Staggered page-load reveal. Applied by [data-reveal] wrappers. */
+  @keyframes reveal-up {
+    from {
+      opacity: 0;
+      transform: translateY(0.75rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  [data-reveal] > * {
+    animation: reveal-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  }
+  [data-reveal] > *:nth-child(1) {
+    animation-delay: 0.02s;
+  }
+  [data-reveal] > *:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+  [data-reveal] > *:nth-child(3) {
+    animation-delay: 0.14s;
+  }
+  [data-reveal] > *:nth-child(4) {
+    animation-delay: 0.2s;
+  }
+  [data-reveal] > *:nth-child(5) {
+    animation-delay: 0.26s;
+  }
+  [data-reveal] > *:nth-child(n + 6) {
+    animation-delay: 0.32s;
+  }
 }

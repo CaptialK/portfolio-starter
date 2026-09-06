@@ -1,69 +1,73 @@
-import Image from "next/image";
+import Link from "next/link";
+import { site } from "@/content/site";
+import { getCaseStudies } from "@/lib/content";
+import { CaseCard } from "@/components/case-card";
 
+/**
+ * The homepage. Three things, in this order: who you are, what you've made,
+ * how to reach you. Nothing else earns its place above the fold.
+ */
 export default function Home() {
+  const studies = getCaseStudies();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="mx-auto max-w-page px-step-4 md:px-step-5">
+      <section className="bg-grid -mx-step-4 px-step-4 py-step-6 md:-mx-step-5 md:px-step-5">
+        <div data-reveal className="max-w-measure">
+          <h1 className="mb-step-3 text-2xl text-ink">{site.name}</h1>
+          <p className="mb-step-3 font-mono text-xs tracking-[0.12em] text-accent uppercase">
+            {site.role}
+          </p>
+          <p className="mb-step-4 text-md text-ink/85">{site.tagline}</p>
+          <p className="text-sm">
+            <a href={`mailto:${site.email}`} className="text-accent">
+              {site.email}
+            </a>
           </p>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </section>
+
+      <section className="py-step-5">
+        <div className="mb-step-4 flex items-baseline justify-between gap-step-3">
+          <h2 className="text-lg text-ink">Selected work</h2>
+          <Link href="/work" className="font-mono text-xs text-muted no-underline hover:text-ink">
+            All work →
+          </Link>
         </div>
-      </main>
+
+        {studies.length > 0 ? (
+          <ul className="m-0 list-none border-b border-line p-0">
+            {studies.slice(0, 3).map((study) => (
+              <CaseCard key={study.slug} study={study} />
+            ))}
+          </ul>
+        ) : (
+          <p className="max-w-measure rounded-lg border border-line bg-panel p-step-4 text-sm text-muted">
+            No case studies yet. Add an <code className="font-mono text-accent">.mdx</code>{" "}
+            file to <code className="font-mono text-accent">content/work/</code> and
+            it appears here — see{" "}
+            <Link href="/guide" className="text-accent">
+              the guide
+            </Link>
+            .
+          </p>
+        )}
+      </section>
+
+      <section className="border-t border-line py-step-5">
+        <h2 className="mb-step-3 text-lg text-ink">How this site got built</h2>
+        <p className="mb-step-4 max-w-measure text-sm text-ink/85">
+          It isn&rsquo;t a template someone else designed. It&rsquo;s a Next.js
+          codebase, directed screen by screen and pushed to a live URL in a week.
+          The course and the setup guide that got it there are both on this site.
+        </p>
+        <Link
+          href="/guide"
+          className="inline-block rounded-lg bg-accent px-step-3 py-step-2 font-mono text-xs text-accent-ink no-underline"
+        >
+          Read the crash course →
+        </Link>
+      </section>
     </div>
   );
 }
