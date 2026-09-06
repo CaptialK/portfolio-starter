@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { deck } from "@/content/decks/portfolio-crash-course";
 import { WordsDrawer } from "@/components/guide/words-drawer";
 
 export const metadata: Metadata = {
@@ -18,20 +17,12 @@ export const metadata: Metadata = {
  * word meant?
  *
  * All of this is scaffolding, not portfolio. When it has done its job, delete
- * `app/guide/`, `components/guide/`, `components/cookbook/`, `content/decks/`,
- * `content/guide/`, `content/glossary.ts` and the `/guide` entry in
- * `content/site.ts`. Nothing else points at them.
+ * `app/guide/`, `components/guide/`, `components/cookbook/`, `content/guide/`,
+ * `content/glossary.ts` and the `/guide` entry in `content/site.ts`. Nothing
+ * else points at them.
  */
 
 const ROUTES = [
-  {
-    href: "/guide/course",
-    eyebrow: "Day 0 → Day 7",
-    title: "The crash course",
-    blurb:
-      "The argument, the method, the reject list, and the seven-day calendar. Read it once, end to end, before you install anything.",
-    meta: `${deck.slides.length} sections · about 15 minutes`,
-  },
   {
     href: "/guide/setup",
     eyebrow: "Day 0",
@@ -81,12 +72,12 @@ export default function GuidePage() {
         <p className="max-w-measure text-md text-ink/85">
           What you have is a working site wearing placeholder words and a
           placeholder look. Every visual decision on it is still yours. These
-          three pages are how you make it yours, and they live inside the project
+          pages are how you make it yours, and they live inside the project
           folder (where all your files are) so they can never go out of date.
         </p>
       </header>
 
-      <ul className="m-0 grid list-none grid-cols-1 gap-step-3 p-0 md:grid-cols-3">
+      <ul className="m-0 grid list-none grid-cols-1 gap-step-3 p-0 md:grid-cols-2">
         {ROUTES.map((route) => (
           <li key={route.href}>
             <Link
@@ -130,7 +121,7 @@ export default function GuidePage() {
           ].join("\n")}
         </pre>
         <a
-          href={deck.download}
+          href="/downloads/portfolio-crash-course.pptx"
           className="font-mono text-xs text-accent"
           download
         >

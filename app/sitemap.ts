@@ -15,7 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/work",
     "/about",
     "/guide",
-    "/guide/course",
     "/guide/setup",
     ...getCaseStudySlugs().map((slug) => `/work/${slug}`),
   ];
