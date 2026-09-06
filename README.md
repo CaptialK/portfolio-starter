@@ -78,6 +78,7 @@ be mistaken for yours. Delete the folder once you have your own.
 - [The design system](docs/design-system.md) — how `globals.css` and `CLAUDE.md` fit together
 - [Directing Claude Code](docs/directing-claude.md) — what a good prompt looks like here
 - [Deploying](docs/deploying.md) — GitHub, Vercel, and a domain
+- [Handoff](docs/HANDOFF.md) — how the starter itself is built, for whoever maintains it
 
 ## Scaffolding
 
@@ -103,6 +104,7 @@ isn't there.
 - `app/guide/` — the whole guide section
 - `content/crash-course.md` — the course text it reads
 - `projects/onboarding-redesign/` — the example project
+- `docs/HANDOFF.md` — notes on building the starter, not on using it
 
 ### Not scaffolding. Don't delete these
 
