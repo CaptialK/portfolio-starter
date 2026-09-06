@@ -6,8 +6,13 @@ site that already exists.
 
 ## 1. Check it builds
 
-Vercel runs `npm run build`. Run it yourself first; the same error is far easier
-to read in your own terminal.
+Vercel runs a production build. Have it run on your own machine first; the
+same error is far easier to read here.
+
+> Run a production build and tell me whether it passed. If it failed, show me
+> the first error.
+
+Underneath, that's one command, and you can run it yourself instead:
 
 ```bash
 npm run build
@@ -18,11 +23,19 @@ noise you don't need.
 
 ## 2. GitHub
 
-Make an empty repository on [github.com](https://github.com/new). No README, no
-`.gitignore`, no licence — this project already has all three, and adding them
-causes a conflict on the first push.
+If you made your copy with **Use this template** and cloned it from inside VS
+Code (the way `/guide/setup` does it), it is already on GitHub, already
+connected, and GitHub already trusts this Mac. Nothing to set up. Skip to
+Vercel; from here on, "save a checkpoint and push" is the whole thing.
 
-Then, in the project folder:
+Only if you started from a folder that was never on GitHub: make an empty
+repository on [github.com](https://github.com/new). No README, no `.gitignore`,
+no licence — this project already has all three, and adding them causes a
+conflict on the first push. Then tell Claude:
+
+> Connect this folder to github.com/YOUR-USERNAME/portfolio and push main.
+
+Or type it yourself, in the project folder:
 
 ```bash
 git remote add origin https://github.com/YOUR-USERNAME/portfolio.git
@@ -31,9 +44,10 @@ git push -u origin main
 ```
 
 If it asks for a password, GitHub wants a personal access token, not your
-account password. The setup guide at `/guide/setup` walks through that.
+account password. Cloning from VS Code avoids this entirely, which is why the
+setup guide does it that way.
 
-Afterwards, `git push` on its own is enough.
+Afterwards, "push it" (or `git push`) on its own is enough.
 
 ## 3. Vercel
 

@@ -23,7 +23,7 @@ export const glossary: Word[] = [
   {
     term: "terminal",
     meaning:
-      "A text box where you type commands, which does exactly what you type and nothing else.",
+      "A text box where commands run; Claude types into it for you, and you read what comes back.",
   },
   {
     term: "npm",

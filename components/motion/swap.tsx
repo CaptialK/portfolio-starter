@@ -67,15 +67,18 @@ export function Swap({ active, items, className }: SwapProps) {
     <div className={`grid ${className ?? ""}`}>
       {/* The sizer. Every item, invisible, in the same cell — so the box is
           already as tall as the tallest one before anything swaps into it. */}
-      <div aria-hidden className="invisible col-start-1 row-start-1 grid">
+      <div aria-hidden className="invisible col-start-1 row-start-1 grid min-w-0">
         {keys.map((key) => (
-          <div key={key} className="col-start-1 row-start-1">
+          <div key={key} className="col-start-1 row-start-1 min-w-0">
             {items[key]}
           </div>
         ))}
       </div>
 
-      <div className="col-start-1 row-start-1">
+      {/* min-w-0 on every cell: a grid item otherwise refuses to be narrower
+          than its longest unbreakable line, which on a phone means the whole
+          block pushes the page sideways. */}
+      <div className="col-start-1 row-start-1 min-w-0">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={active}

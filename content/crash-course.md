@@ -2,6 +2,8 @@
 
 > Drop this file into the repo at `content/crash-course.md`. It is the single source of truth for the `/guide` section. Every section below has a stable `id` so components can reference it. Do not paraphrase the copy when building; render it.
 
+> Where a step has two ways to do it, the way you **ask Claude** comes first and is the one to use. The way you **type it yourself** follows, as the alternative. Both are true. The typed version is the plumbing under the spoken one, and a design engineer knows it; but nothing this week requires it.
+
 ---
 
 ## meta
@@ -25,6 +27,7 @@
 **You will not**
 - Learn React (you don't need to)
 - Hand-write code
+- Type commands into a terminal (unless you want to)
 - Understand everything it generates
 - Make it perfect
 
@@ -52,7 +55,7 @@
 | Motion (Framer Motion) | Animation and micro-interactions. What makes it feel designed. |
 | Vercel | Hosting. Every push goes live in about a minute. |
 | GitHub | Your save history. Undo for everything. |
-| Claude Code | The builder. You direct, it types. |
+| Claude Code | The builder. You direct, it types: the code and the commands. |
 
 ---
 
@@ -61,14 +64,18 @@
 
 | Install | Notes |
 |---|---|
-| VS Code | Plus the Claude Code extension. No separate CLI needed. |
+| VS Code | Plus the Claude Code extension. Editor, terminal and Claude in one window. No separate CLI needed. |
 | Node.js (LTS) | nodejs.org, click the LTS button. Next.js and Claude Code both need it. |
-| Git | Run `git --version`; macOS offers to install the developer tools. |
+| Git | Comes with Apple's developer tools. VS Code offers to install them the first time it needs Git. |
 | GitHub account | Free. This is where the code lives. |
 | Vercel account | Sign in with GitHub. Free tier is plenty. |
 | Domain (Day 7) | Cloudflare or Namecheap. firstnamelastname.com if it's free. |
 
-**Then check it worked** (each prints a version, not "command not found"):
+**Then check it worked.** Make an empty folder called Projects, drag it onto the VS Code icon in the Dock to open it, open the Claude Code panel, and ask:
+
+> Check that Node, npm and Git are installed on this Mac and tell me the version of each. If one is missing, tell me how to install it.
+
+Or type it yourself. Open VS Code's terminal (Control + backtick) and each of these prints a version, not "command not found":
 
 ```
 node -v
@@ -84,7 +91,7 @@ code --version
 
 1. **You prompt.** Screenshot, Figma frame, exact words.
 2. **Claude edits files.** Writes the components and styles.
-3. **Browser updates.** `npm run dev` refreshes localhost:3000 in under a second.
+3. **Browser updates.** The dev server refreshes localhost:3000 in under a second.
 4. **You judge.** Look at it at 375px. Accept, or say what's wrong.
 
 Then back to step 1. Dozens of times a day.
@@ -137,7 +144,18 @@ Pick the three that show different things:
 ## section: scaffold
 ### Day 1: take your copy, run it, deploy it. Same day.
 
-Vinson built the starter. You take your own copy of it on GitHub, so from here on it's your repo, your Vercel, your commits.
+Vinson built the starter. You take your own copy of it on GitHub, so from here on it's your repo, your Vercel, your commits. None of this needs a typed command.
+
+1. **Use this template.** On github.com, open the starter → Use this template → name it portfolio. A fresh repo under your account with the starter's files and none of Vinson's history. Not a fork, not a zip.
+2. **Clone it from VS Code.** ⌘⇧P → Git: Clone → Clone from GitHub → pick portfolio → save it in your Projects folder → Open. VS Code handles the GitHub sign-in.
+3. **Open it any day after.** Drag the portfolio folder onto the VS Code icon in the Dock, or into an empty VS Code window. That's how you open a project.
+4. **Ask Claude to run it.** Open the Claude Code panel and paste the prompt below. When it asks to run a command you asked for, say yes.
+5. **Import on Vercel.** vercel.com → Add New → Project → pick your repo → Deploy. Defaults are fine. Your account, your URL.
+6. **You're live.** A real URL on Day 1. Everything after this is iteration on a site that already exists.
+
+> Install this project's packages, then start the dev server and keep it running. Give me the localhost link, and tell me if anything fails.
+
+Or type it yourself, in VS Code's terminal:
 
 ```
 # on github.com: open the starter repo → Use this template → name it portfolio
@@ -147,30 +165,27 @@ npm install        # fetch the packages (they're not in Git)
 npm run dev        # open http://localhost:3000
 ```
 
-1. **Use this template.** Not a fork, not a zip. A fresh repo under your account with the starter's files and none of Vinson's history.
-2. **Import on Vercel.** vercel.com → Add New → Project → pick your repo → Deploy. Defaults are fine. Your account, your URL.
-3. **You're live.** A real URL on Day 1. Everything after this is iteration on a site that already exists.
-
 Also on Day 1: fill in CLAUDE.md. Do it before the first real build prompt.
 
 ---
 
 ## section: git
-### Git: the only five commands you need
+### Git: five things you'll say, and the five commands underneath
 
-| Command | Meaning |
-|---|---|
-| `git status` | What changed since the last save? |
-| `git add .` | Stage everything. |
-| `git commit -m "what you did"` | Save a checkpoint with a note. |
-| `git push` | Send it up. Vercel deploys automatically. |
-| `git log --oneline` | See your history. |
+| Say to Claude | It runs | Meaning |
+|---|---|---|
+| "What's changed since my last checkpoint?" | `git status` | What changed since the last save? |
+| "Save a checkpoint: homepage hero" | `git add .` then `git commit -m "homepage hero"` | Save everything, with a note. |
+| "Push it live" | `git push` | Send it up. Vercel deploys automatically. |
+| "Show me my history" | `git log --oneline` | Every checkpoint, one line each. |
+| "Go back to the last checkpoint" | `git restore .` | Throw away everything since the last save. |
 
 **Rules**
 - One branch. It's called main. No others this week.
-- Commit every time something works. Small and often.
+- Save a checkpoint every time something works. Small and often.
 - Push = deploy. Only push what you'd show someone.
-- Broke it? Tell Claude Code: "revert to the last commit."
+- Broke it? "Go back to the last checkpoint." That's the whole undo.
+- Want to type them yourself? Use the middle column. Worth knowing by week two if "design engineer" is going on your résumé.
 
 > Git isn't a skill to learn. It's what makes breaking things free.
 
@@ -180,10 +195,10 @@ Also on Day 1: fill in CLAUDE.md. Do it before the first real build prompt.
 ### The loop you'll run fifty times a day
 
 1. **Describe** — One screen. Figma frame or screenshot attached. Exact sizes and rules.
-2. **Build** — Claude Code edits. Watch the terminal; it tells you what it touched.
+2. **Build** — Claude Code edits, and runs whatever it needs to. Read what it says it touched.
 3. **Look** — Browser, at 375px and desktop. Actually click things.
 4. **Judge** — Accept, or paste a screenshot and say precisely what's wrong.
-5. **Commit** — Works? git add . / commit / push. Next screen.
+5. **Commit** — Works? "Save a checkpoint and push: [what you did]." Next screen.
 
 > Never accept what you haven't looked at. The agent will produce something competent by default. Competent-by-default is what everyone else is shipping. Your taste is the only thing on this site that isn't a commodity.
 
@@ -272,8 +287,8 @@ If it needs real data from an API, that's what TanStack Query is for. Otherwise,
 
 | Day | Title | What happens |
 |---|---|---|
-| 0 | Install | Everything on the install list. Accounts made. Versions print. |
-| 1 | Clone + deploy | Use this template, clone, npm install, Vercel. Fill in CLAUDE.md. Site map in Figma. |
+| 0 | Install | Everything on the install list. Accounts made. Ask Claude to check the versions. |
+| 1 | Clone + deploy | Use this template, clone from VS Code, ask Claude to install and run it, import on Vercel. Fill in CLAUDE.md. Site map in Figma. |
 | 2 | Write | Three case studies, in a doc, using the anatomy template. |
 | 3 | Design | Home + case-study template in Figma. Mobile first. Type and spacing scales set. |
 | 4 | Build the shell | Home and the case-study template with Claude Code. Screen by screen. |
@@ -312,16 +327,26 @@ If it needs real data from an API, that's what TanStack Query is for. Otherwise,
 
 **Apps from the web** — VS Code, Node.js, Git, Chrome. Download from a website, run an installer. Install once for the whole Mac. Live in /Applications. You'll almost never touch these again.
 
-**Packages from npm** — Next.js, React, Tailwind, Motion, TanStack Query. Downloaded by typing a command in the terminal. Installed per project, into the project folder. Live in `node_modules`. Listed in `package.json` so they can be re-downloaded anytime.
+**Packages from npm** — Next.js, React, Tailwind, Motion, TanStack Query. Downloaded by a command that Claude runs for you in the terminal. Installed per project, into the project folder. Live in `node_modules`. Listed in `package.json` so they can be re-downloaded anytime.
 
 > Think of it like Figma vs. a Figma file's fonts and plugins. Figma is installed once. The specific fonts a file uses belong to that file.
 
 ## setup: terminal
-### The terminal
+### The terminal: read it, don't type in it (yet)
 
-Open it inside VS Code with **Control + backtick** (⌃`). The backtick key is directly under esc. ⌃⇧` opens a second terminal. Menu fallback: Terminal → New Terminal.
+A terminal is a text box that runs commands. This week, Claude types into it and you read what comes back. Two things happen there that you need to be able to see: the dev server runs in it, and errors show up in it.
 
-Why VS Code's terminal: it opens already inside the folder you have open, so commands run in the right place.
+Open it inside VS Code with **Control + backtick** (⌃`). The backtick key is directly under esc. Menu fallback: Terminal → New Terminal.
+
+The three things you'll actually do in it:
+
+| Do | When |
+|---|---|
+| Read the last two lines | Something went wrong. That's where it says what. |
+| Screenshot it | Drop the screenshot into Claude with "what's wrong?" |
+| ⌃C | Stop whatever is running (how you stop the dev server yourself). |
+
+**Or type it yourself.** The commands Claude runs on your behalf, for when you'd rather run them:
 
 | Type | What it does |
 |---|---|
@@ -329,30 +354,28 @@ Why VS Code's terminal: it opens already inside the folder you have open, so com
 | `ls` | What's in this folder? |
 | `cd portfolio` | Move into that folder. `cd ..` goes up. |
 | `clear` | Wipe the screen. |
-| ⌃C | Stop whatever is running (how you stop the dev server). |
 | ↑ | Bring back the last command. |
 | Tab | Autocomplete a file or folder name. |
 
-Rules: never paste a command you don't understand; if something asks for your password (`sudo`), stop and ask.
+Rule, either way: when Claude asks to run a command, read it. If it's the thing you asked for, allow it. If it isn't, or it asks for your password (`sudo`), stop and ask what it's for.
 
 ## setup: npm
 ### npm
 
 An app store for code, without the storefront. `package.json` is the shopping list. `node_modules/` is the delivered boxes: huge, ignored by Git, never edited, always regenerable.
 
-| Command | Meaning |
-|---|---|
-| `npm install` | Download everything on the list. |
-| `npm install motion` | Add one package to the list and download it. |
-| `npx create-next-app@latest` | Run a tool once without keeping it. |
-| `npm run dev` | Run the script named `dev` from package.json. |
+| Say to Claude | It runs | Meaning |
+|---|---|---|
+| "Install the packages" | `npm install` | Download everything on the list. |
+| "Add Motion to the project" | `npm install motion` | Add one package to the list and download it. |
+| "Start the dev server" | `npm run dev` | Run the script named `dev` from package.json. |
 
 ## setup: run
 ### Run it
 
-- `npm run dev` — the dev server. Starts localhost:3000 and rebuilds on every save. Leave it running. ⌃C stops it.
-- `npm run build` — the production build. Refuses to finish if anything is broken. **Run before every push.** Green build → safe to push.
-- `npm run start` — serves the build exactly as production would. Rare.
+- "Start the dev server and keep it running" — `npm run dev`. Starts localhost:3000 and rebuilds on every save. Leave it running. ⌃C stops it if you started it yourself; "stop the dev server" if Claude did.
+- "Run a production build and tell me if anything fails" — `npm run build`. Refuses to finish if anything is broken. **Do it before every push.** Green build → safe to push.
+- "Serve the production build" — `npm run start`. Shows the built site exactly as production would. Rare.
 
 These are just the `scripts` block in package.json.
 
@@ -361,12 +384,13 @@ These are just the `scripts` block in package.json.
 
 ```
 portfolio/
-├── app/                  ← your pages. every folder here is a URL
+├── app/                  ← the pages. every folder here is a URL
 │   ├── layout.tsx        ← the frame around every page: fonts, nav, footer
 │   ├── page.tsx          ← the homepage. what shows at /
-│   └── globals.css       ← global styles + the Tailwind import
+│   └── globals.css       ← design tokens + the Tailwind import
+├── projects/             ← YOUR WORK. one folder per case study
 ├── components/           ← reusable pieces. Figma components, but real
-├── content/              ← your words. case studies as .mdx
+├── content/              ← your words: name, about page, this guide
 ├── public/               ← images served as-is. public/me.jpg → /me.jpg
 ├── node_modules/         ← downloaded packages. never edit, never commit
 ├── package.json          ← the shopping list + scripts
@@ -374,25 +398,25 @@ portfolio/
 └── AGENTS.md             ← rules for AI agents working in this repo
 ```
 
-**File-based routing:** `app/about/page.tsx` → `/about`. `app/work/onboarding-redesign/page.tsx` → `/work/onboarding-redesign`. No config anywhere.
+**Folders are addresses:** `app/about/page.tsx` → `/about`. `projects/onboarding-redesign/` → `/work/onboarding-redesign`. No config anywhere.
 
-**How it ships:** your files → `git push` → Vercel runs `npm run build` → live on a CDN in about 60 seconds. Push is the deploy.
+**How it ships:** your files → push → Vercel runs the build → live on a CDN in about 60 seconds. Push is the deploy.
 
 ## setup: troubleshooting
 ### When something breaks
 
 | You see | Do |
 |---|---|
-| `command not found: node` | Quit VS Code fully and reopen. Still failing → reinstall Node. |
-| `Cannot find module …` | `npm install` |
-| `Port 3000 is in use` | Another dev server is running. Next uses 3001; fine. Or ⌃C the other one. |
-| `ENOENT … package.json` | Wrong folder. `pwd`, then `cd portfolio`. |
+| Browser can't reach localhost:3000 | The dev server isn't running. "Start the dev server." (`npm run dev`) |
+| `Cannot find module …` | "Install the packages." (`npm install`) |
+| `Port 3000 is in use` | Another dev server is running. Next uses 3001; fine. Or "stop the other dev server." |
 | Red error overlay | Copy the first line to Claude with "fix this," or rewind. |
-| Browser shows old content | File not saved (⌘S), or dev server crashed. Check terminal. |
-| Terminal looks frozen | Dev server is running. Open a second terminal. |
-| Vercel build failed | Run `npm run build` locally. Same error, easier to read. |
+| Browser shows old content | File not saved (⌘S), or the dev server crashed. "Is the dev server still running?" |
+| Terminal looks frozen | That's the dev server running. Leave it. |
+| Vercel build failed | "Run a production build and fix what fails." (`npm run build`) |
+| `command not found: node` | Quit VS Code fully and reopen. Still failing → reinstall Node. |
 
-> Stuck for more than ten minutes: screenshot the terminal, screenshot the browser, drop both into Claude with "what's wrong and what should I type?"
+> Stuck for more than ten minutes: screenshot the terminal, screenshot the browser, drop both into Claude with "what's wrong and what should we do?"
 
 ---
 ---
@@ -427,13 +451,19 @@ projects/
 The folder name becomes the address: `projects/onboarding-redesign` shows at `/work/onboarding-redesign`. Lowercase, dashes instead of spaces.
 
 ## quickstart: steps
-### Five steps
+### Five steps, and it's on the site
 
-1. In VS Code's file tree, right-click `_template` → Duplicate. Rename the copy to your project, lowercase-with-dashes.
-2. Drag your files in from Finder: a cover image, screenshots into `images/`, a Figma PDF export, whatever you have. Names don't matter yet; you'll tidy them later.
-3. Open `project.md`. Fill in the top: title, your role, year, tools, one-line summary. Leave the long sections empty if you haven't written them. Save.
-4. Look at `localhost:3000/work`. Your project card is there. Click it. That's your page, unstyled and honest.
-5. Now hand it to Claude with one of the prompts below.
+1. **Copy the template** — In the file tree on the left of VS Code, open `projects/`. Right-click `_template` → Copy. Then right-click `projects` → Paste. A folder called `_template copy` appears under it.
+2. **Rename the copy** — Right-click it → Rename, or click it once and press Enter. Lowercase, dashes instead of spaces: `checkout-redesign`, not `Checkout Redesign v2`. The name is the address: this one shows at `/work/checkout-redesign`.
+3. **Drag your files in from Finder** — Screenshots go onto `images/`. Your cover image goes onto the folder itself, named `cover.jpg`. A Figma export or flow notes go onto `prototype/`. Let go on the folder's name and the file copies in. Names don't matter yet; you'll tidy them later.
+4. **Fill in the top of project.md** — Click it to open. Between the two `---` lines, replace title, role, year, tools and summary with yours. Leave the long sections empty if you haven't written them. Save with ⌘S.
+5. **Look at /work** — Open `localhost:3000/work` in Chrome. Your card is there. Click it. That's your page, unstyled and honest. Now hand it to Claude with one of the prompts below.
+
+Steps 1 and 2 are one sentence to Claude, if you'd rather:
+> Make a new project folder called checkout-redesign by copying projects/_template. Don't fill anything in yet.
+
+Already have a folder of files on your Desktop? Drag the whole folder onto `projects/` in the file tree, then say:
+> projects/checkout-redesign has my files in it. Make it a project: add project.md from projects/_template, move the screenshots into images/, and use the widest image as cover.jpg. Don't write any words yet.
 
 ## quickstart: template
 ### What's in project.md
@@ -484,6 +514,9 @@ Each of these assumes Claude Code is open in the panel with your project folder 
 **Prompt D — fix what I'm looking at** (any time)
 > Here is a screenshot. [drag it in] The thing that's wrong: [say it plainly]. Fix only that.
 
+**Prompt E — ship it** (when it works and you've looked)
+> Run a production build. If it passes, save a checkpoint called "[what you did]" and push it. If it fails, show me the first error and fix only that.
+
 ## quickstart: rules
 ### Three rules that keep this fun
 
@@ -500,7 +533,7 @@ This guide lives inside your site so you could read it while building. It doesn'
 showGuide: true   →   showGuide: false
 ```
 
-Save, then `git add .` / `git commit -m "hide guide"` / `git push`. The guide disappears from your live site. It stays at `localhost:3000/guide` whenever you run the dev server, cookbook included, for as long as you want it.
+Save, then tell Claude: "save a checkpoint called hide guide and push it." (Typing it yourself: `git add .` / `git commit -m "hide guide"` / `git push`.) The guide disappears from your live site. It stays at `localhost:3000/guide` whenever the dev server is running, cookbook included, for as long as you want it.
 
 ---
 

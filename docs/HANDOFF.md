@@ -13,7 +13,9 @@ it fits together, what was decided and why, and what will bite you.
 
 A portfolio starter for a designer who has never written code and isn't going
 to. Aaron clicks **Use this template**, and from then on his workflow is *add a
-folder, then talk to Claude about it*. No page is ever hand-built.
+folder, then talk to Claude about it*. No page is ever hand-built, and no
+command has to be typed: every step in the guide leads with what to say to
+Claude, with the terminal version folded underneath as the alternative.
 
 Bolted onto it, and deletable, is the seven-day course that teaches him to do
 that: `/guide`, `/guide/setup`, `/guide/start`, `/guide/motion`.
@@ -37,6 +39,18 @@ is wrong, it's wrong in a content file.
 cookbook at `/guide/motion`. Timing lives once in `lib/motion-tokens.ts`.
 
 ## Decisions that aren't obvious
+
+**Prompt first, terminal second.** Decided 2026-09-05. The first draft taught
+the terminal as the primary tool: five Git commands, a seven-command cheat
+sheet, "you type every command yourself." Aaron is a designer directing an
+agent, and Claude Code can run every one of those commands, so every step that
+needs one now leads with the sentence to say and folds the command behind a
+disclosure. The commands stay, in full, because they're the plumbing under the
+sentence and the route to "design engineer." Both versions have to stay true
+when one changes. `AskOrType` in `components/guide/course/` is the course-page
+shape; `<details class="alt">` is the setup walkthrough's. The one terminal
+skill the guide still teaches is reading it: the last two lines, and the
+"allow this command?" box.
 
 **`projects/` sits outside `public/`, so it needs a route.** Files are only
 web-addressable from `public/`, but the images belong next to the words that
@@ -122,12 +136,27 @@ Everything below was measured, not assumed.
   or use `animate` (which does resolve variables).
 - **Motion scroll ranges must stay within 0–1.** A negative offset is a hard
   browser error that stops the whole page rendering.
+- **`lib/crash-course.ts` only caches the parsed Markdown in production.** In
+  development it re-reads the file on every request, because the dev server
+  never re-runs that module for a `.md` edit; with the cache on, changes to the
+  course text didn't show until a restart. That cost a confused half hour on
+  2026-09-05.
 - **Editing `content/crash-course.md`:** sections are `## kind: id` with the
   visible heading on the `###` line under it. The parser is fence-aware because
   the template section contains a whole file — `---` and `##` included — inside
-  a code fence. Keep the four A–D prompts in the form
+  a code fence. Keep the five A–E prompts in the form
   `**Prompt A — title** (when)` followed by a `>` quote, or `/guide/start`
-  throws on build.
+  throws on build. The `install` and `scaffold` sections each need one `>`
+  quote (the prompt) and one fence (the commands); `AskOrType` reads both.
+- **The deck at `public/downloads/portfolio-crash-course.pptx` is no longer
+  linked from anywhere.** It predates the prompt-first rewrite and still shows
+  the five Git commands as the primary route. The link came off `/guide` on
+  2026-09-06; the file is safe to delete.
+- **VS Code's file tree has no "Duplicate".** The first draft of the quick
+  start said "right-click `_template` → Duplicate", which is a Finder command.
+  In VS Code it's Copy on `_template`, then Paste on `projects`, which makes
+  `_template copy`. The walkthrough at `/guide/start` shows this; keep
+  `projects/README.md` and `docs/adding-a-project.md` saying the same thing.
 - **Animation budget is enforced.** 800ms max, stagger gaps 40–80ms. `Stagger`
   warns in the console if a list blows it. Two documented exceptions: the
   dev-server loop and `Terminal`.

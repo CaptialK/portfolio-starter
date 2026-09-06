@@ -12,16 +12,22 @@ site.
 
 ## Five steps
 
-1. In VS Code's file tree, right-click `_template` → Duplicate. Rename the copy
-   to your project, lowercase-with-dashes.
-2. Drag your files in from Finder: a cover image, screenshots into `images/`, a
-   Figma PDF export, whatever you have. Names don't matter yet; you'll tidy them
-   later.
-3. Open `project.md`. Fill in the top: title, your role, year, tools, one-line
+1. In VS Code's file tree, right-click `_template` → Copy, then right-click
+   `projects` → Paste. A folder called `_template copy` appears.
+2. Right-click the copy → Rename. Lowercase, dashes instead of spaces:
+   `checkout-redesign`, not `Checkout Redesign v2`.
+3. Drag your files in from Finder: screenshots onto `images/`, your cover image
+   onto the folder itself named `cover.jpg`, anything else onto `prototype/`.
+   Let go on the folder's name and the file copies in. Names don't matter yet.
+4. Open `project.md`. Fill in the top: title, your role, year, tools, one-line
    summary. Leave the long sections empty if you haven't written them. Save.
-4. Look at `localhost:3000/work`. Your project card is there. Click it. That's
-   your page, unstyled and honest.
-5. Now hand it to Claude with one of the prompts at `/guide/start`.
+5. Look at `localhost:3000/work`. Your project card is there. Click it. That's
+   your page, unstyled and honest. Now hand it to Claude with one of the
+   prompts at `/guide/start`.
+
+Or skip the first two steps and tell Claude: "make a new project folder called
+checkout-redesign by copying projects/_template." The walkthrough at
+`/guide/start` shows every step on screen.
 
 ## What goes in a folder
 

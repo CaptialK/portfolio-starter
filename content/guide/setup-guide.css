@@ -158,6 +158,21 @@
   .term .m { color: var(--term-muted); font-style: italic; }
   .term .ok { color: var(--term-accent); }
 
+  /* the "say to Claude" version of a step: same window, accent title */
+  .term.ask .bar .title { color: var(--accent); }
+
+  /* the typed version of a step, folded under the spoken one */
+  details.alt { max-width: 78ch; margin: 6px 0 18px; border: 1px dashed var(--line); border-radius: 10px; padding: 0 16px; }
+  details.alt summary { cursor: pointer; padding: 11px 0; font-family: var(--font-mono); font-size: 12.5px; color: var(--muted); list-style: none; display: flex; gap: 10px; align-items: baseline; }
+  details.alt summary::-webkit-details-marker { display: none; }
+  details.alt summary::before { content: "+"; color: var(--accent); }
+  details.alt[open] summary::before { content: "−"; }
+  details.alt summary:hover { color: var(--ink); }
+  details.alt[open] summary { border-bottom: 1px dashed var(--line); margin-bottom: 12px; }
+  details.alt > :last-child { margin-bottom: 16px; }
+  details.alt .term { margin-top: 4px; }
+  details.alt .what { margin-top: 4px; }
+
   /* callouts */
   .note, .warn, .vinson { padding: 14px 18px; border-radius: 10px; margin: 16px 0 18px; max-width: 78ch; font-size: 15px; }
   .note { background: var(--accent-soft); }

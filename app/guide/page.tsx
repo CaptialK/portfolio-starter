@@ -26,6 +26,7 @@ import {
   TableRows,
   stripEmphasis,
 } from "@/components/guide/course/panel";
+import { AskOrType } from "@/components/guide/course/ask-or-type";
 import { DayDots } from "@/components/guide/course/day-dots";
 import { DevLoop } from "@/components/guide/course/dev-loop";
 import { DailyLoop } from "@/components/guide/course/daily-loop";
@@ -36,7 +37,6 @@ import { ScrollProgress } from "@/components/motion/scroll-progress";
 import { Reveal } from "@/components/motion/reveal";
 import { Stagger, StaggerItem } from "@/components/motion/stagger";
 import { Hoverable } from "@/components/motion/hoverable";
-import { Terminal } from "@/components/motion/terminal";
 import { Counter } from "@/components/motion/counter";
 import { Check } from "@/components/motion/check";
 
@@ -186,14 +186,11 @@ export default function CoursePage() {
             <TableRows rows={parseTable(install.body).rows} />
           </div>
           <div className="min-w-0">
-            <p className="mb-step-3 text-sm text-ink/85">
-              {stripEmphasis(parseProse(install.body).slice(-1)[0] ?? "")}
-            </p>
-            <Terminal
-              lines={(fencedBlocks(install.body)[0] ?? "")
-                .split("\n")
-                .filter(Boolean)
-                .map((text) => ({ type: "cmd" as const, text }))}
+            <AskOrType
+              lead={stripEmphasis(parseProse(install.body)[0] ?? "")}
+              prompt={parseQuotes(install.body)[0] ?? ""}
+              alternative={stripEmphasis(parseProse(install.body)[1] ?? "")}
+              commands={fencedBlocks(install.body)[0] ?? ""}
             />
           </div>
         </div>
@@ -263,45 +260,42 @@ export default function CoursePage() {
             {parseProse(scaffold.body)[0]}
           </p>
         </Reveal>
-        <div className="grid gap-step-4 lg:grid-cols-2">
+        <NumberedCards items={parseOrdered(scaffold.body)} columns={3} />
+        <div className="mt-step-4 grid gap-step-4 lg:grid-cols-2">
           <div className="min-w-0">
-            <Terminal
-              title="zsh"
-              lines={(fencedBlocks(scaffold.body)[0] ?? "")
-                .split("\n")
-                .filter(Boolean)
-                .map((text) => ({
-                  type: text.trim().startsWith("#")
-                    ? ("comment" as const)
-                    : ("cmd" as const),
-                  text,
-                }))}
+            <AskOrType
+              prompt={parseQuotes(scaffold.body)[0] ?? ""}
+              alternative={parseProse(scaffold.body)[1] ?? ""}
+              commands={fencedBlocks(scaffold.body)[0] ?? ""}
             />
           </div>
           <div className="min-w-0">
-            <NumberedCards items={parseOrdered(scaffold.body)} columns={2} />
+            <Reveal>
+              <p className="max-w-measure text-sm text-ink/85">
+                {parseProse(scaffold.body).slice(-1)[0] ?? ""}
+              </p>
+            </Reveal>
           </div>
         </div>
       </Panel>
 
       {/* ------------------------------------------------------------- git */}
       <Panel id="git" n={10} eyebrow="Plumbing" heading={git.heading}>
-        <div className="grid gap-step-4 lg:grid-cols-2">
-          <div className="min-w-0">
-            <TableRows rows={parseTable(git.body).rows} mono />
-          </div>
-          <div className="min-w-0">
-            <h3 className="mb-step-3 font-mono text-xs tracking-[0.12em] text-muted uppercase">
-              Rules
-            </h3>
-            <Stagger as="ul" className="m-0 list-none space-y-step-2 p-0">
-              {parseBullets(git.body).map((rule) => (
-                <StaggerItem as="li" key={rule} className="text-sm text-ink/85">
-                  {stripEmphasis(rule)}
-                </StaggerItem>
-              ))}
-            </Stagger>
-          </div>
+        <TableRows rows={parseTable(git.body).rows} />
+        <div className="mt-step-4">
+          <h3 className="mb-step-3 font-mono text-xs tracking-[0.12em] text-muted uppercase">
+            Rules
+          </h3>
+          <Stagger
+            as="ul"
+            className="m-0 grid list-none gap-step-2 p-0 md:grid-cols-2"
+          >
+            {parseBullets(git.body).map((rule) => (
+              <StaggerItem as="li" key={rule} className="text-sm text-ink/85">
+                {stripEmphasis(rule)}
+              </StaggerItem>
+            ))}
+          </Stagger>
         </div>
         <Quote>{parseQuotes(git.body)[0]}</Quote>
       </Panel>
@@ -449,7 +443,7 @@ export default function CoursePage() {
                 href: "/guide/setup",
                 title: "The setup walkthrough",
                 blurb:
-                  "Every download and every command, in order. Start here if nothing is installed yet.",
+                  "Every download, and what to ask Claude at each step, in order. Start here if nothing is installed yet.",
               },
               {
                 href: "/guide/start",
@@ -477,16 +471,6 @@ export default function CoursePage() {
               </li>
             ))}
           </ul>
-
-          <p className="mt-step-5 font-mono text-xs">
-            <a
-              href="/downloads/portfolio-crash-course.pptx"
-              className="text-accent"
-              download
-            >
-              Download the deck (.pptx) ↓
-            </a>
-          </p>
         </div>
       </section>
     </>

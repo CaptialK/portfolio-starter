@@ -8,12 +8,17 @@ import {
   getPromptsIntro,
   getQuickstartPrompts,
   getSection,
+  parseOrdered,
+  parseProse,
+  parseQuotes,
   withoutFences,
 } from "@/lib/crash-course";
 import { mdxComponents } from "@/components/mdx-components";
 import { WordsDrawer } from "@/components/guide/words-drawer";
 import { FolderTree } from "@/components/guide/folder-tree";
 import { CopyButton } from "@/components/guide/copy-button";
+import { AddProject } from "@/components/guide/add-project";
+import { SayToClaude } from "@/components/guide/course/ask-or-type";
 import { Reveal } from "@/components/motion/reveal";
 import { Stagger, StaggerItem } from "@/components/motion/stagger";
 import { Hoverable } from "@/components/motion/hoverable";
@@ -98,6 +103,33 @@ export default async function QuickStartPage() {
         </div>
       </header>
 
+      {/* ----------------------------------------------------------- steps */}
+      <section className="border-t border-line py-step-5">
+        <h2 className="mb-step-4 text-lg text-ink">{steps.heading}</h2>
+        <p className="mb-step-4 max-w-measure text-sm text-muted">
+          Click a step to see what it looks like on screen.
+        </p>
+        <AddProject
+          steps={parseOrdered(steps.body).map((step) => ({
+            label: step.label,
+            body: <Prose markdown={step.body} />,
+          }))}
+        />
+
+        {/* The two shortcuts: each is a sentence in the course text, with the
+            line that introduces it right above. */}
+        <div className="mt-step-5 grid gap-step-4 lg:grid-cols-2">
+          {parseQuotes(steps.body).map((ask, i) => (
+            <div key={ask} className="min-w-0">
+              <div className="mb-step-3 max-w-measure text-sm text-ink/85">
+                <Prose markdown={parseProse(steps.body)[i] ?? ""} />
+              </div>
+              <SayToClaude prompt={ask} />
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* ---------------------------------------------------------- folder */}
       <section className="border-t border-line py-step-5">
         <h2 className="mb-step-4 text-lg text-ink">{folder.heading}</h2>
@@ -107,28 +139,6 @@ export default async function QuickStartPage() {
         <div className="mt-step-4 max-w-measure text-sm text-ink/85">
           <Prose markdown={withoutFences(folder.body)} />
         </div>
-      </section>
-
-      {/* ----------------------------------------------------------- steps */}
-      <section className="border-t border-line py-step-5">
-        <h2 className="mb-step-4 text-lg text-ink">{steps.heading}</h2>
-        <Stagger as="ol" className="m-0 grid list-none gap-step-3 p-0">
-          {steps.body
-            .split("\n")
-            .filter((line) => /^\d+\.\s/.test(line.trim()))
-            .map((line, i) => (
-              <StaggerItem
-                as="li"
-                key={i}
-                className="flex gap-step-3 rounded-lg border border-line bg-panel p-step-4"
-              >
-                <span className="font-mono text-xs text-accent">{i + 1}</span>
-                <div className="min-w-0 max-w-measure text-sm text-ink/85 [&_p]:mb-0">
-                  <Prose markdown={line.replace(/^\s*\d+\.\s*/, "")} />
-                </div>
-              </StaggerItem>
-            ))}
-        </Stagger>
       </section>
 
       {/* -------------------------------------------------------- template */}

@@ -9,7 +9,7 @@ import "@/content/guide/setup-guide.css";
 export const metadata: Metadata = {
   title: "Setup walkthrough",
   description:
-    "Every download and every command, in order, for a designer who has never opened a terminal.",
+    "Every download, and what to ask Claude at each step, for a designer who has never opened a terminal and doesn't have to.",
 };
 
 /**

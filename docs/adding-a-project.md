@@ -2,10 +2,16 @@
 
 ## The short version
 
-1. In VS Code's file tree, right-click `projects/_template` → Duplicate.
+1. In VS Code's file tree, right-click `projects/_template` → Copy, then
+   right-click `projects` → Paste. (There's no Duplicate in VS Code's tree;
+   that's a Finder command.)
 2. Rename the copy to your project, lowercase-with-dashes.
 3. Open `project.md`, fill in the top, save.
 4. Look at `localhost:3000/work`. It's there.
+
+Or, one sentence to Claude: "make a new project folder called
+checkout-redesign by copying projects/_template." Every step is shown on
+screen at `/guide/start`.
 
 No code. No list to update. The folder name becomes the address, so
 `projects/onboarding-redesign` shows at `/work/onboarding-redesign`.

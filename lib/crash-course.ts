@@ -84,7 +84,14 @@ function parse(): CourseSection[] {
 
 let cache: CourseSection[] | null = null;
 
+/**
+ * Cached in production, where the file can't change. Re-read on every request
+ * in development, because the dev server only re-runs this module when a
+ * module changes — and the Markdown isn't one. Without this, an edit to
+ * content/crash-course.md doesn't show until the dev server restarts.
+ */
 export function getCourseSections(): CourseSection[] {
+  if (process.env.NODE_ENV !== "production") return parse();
   cache ??= parse();
   return cache;
 }

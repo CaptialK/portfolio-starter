@@ -60,7 +60,13 @@ export function Quote({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** A two-column table as a set of rows you can read down. */
+/**
+ * A table as a set of rows you can read down.
+ *
+ * Two columns: a label and its meaning. Three columns: a label, the command
+ * underneath it in monospace, and the meaning — the shape of the Git table,
+ * where the thing you say to Claude sits beside the thing it runs.
+ */
 export function TableRows({
   rows,
   mono,
@@ -71,22 +77,36 @@ export function TableRows({
 }) {
   return (
     <Stagger as="ul" className="m-0 list-none border-t border-line p-0">
-      {rows.map((row) => (
-        <StaggerItem
-          as="li"
-          key={row.cells[0]}
-          className="flex flex-col gap-step-1 border-b border-line py-step-3 sm:flex-row sm:gap-step-4"
-        >
-          <span
-            className={`shrink-0 text-sm text-ink sm:w-56 ${mono ? "font-mono text-xs text-accent" : ""}`}
+      {rows.map((row) => {
+        const three = row.cells.length >= 3;
+        const last = stripCode(row.cells[row.cells.length - 1] ?? "");
+        return (
+          <StaggerItem
+            as="li"
+            key={row.cells[0]}
+            className="flex flex-col gap-step-1 border-b border-line py-step-3 sm:flex-row sm:gap-step-4"
           >
-            {row.cells[0]}
-          </span>
-          <span className="text-sm text-muted">{row.cells[1]}</span>
-        </StaggerItem>
-      ))}
+            <span
+              className={`shrink-0 text-sm text-ink sm:w-56 ${mono ? "font-mono text-xs text-accent" : ""}`}
+            >
+              {stripCode(row.cells[0])}
+            </span>
+            {three && (
+              <span className="shrink-0 font-mono text-xs text-accent sm:w-56">
+                {stripCode(row.cells[1])}
+              </span>
+            )}
+            <span className="text-sm text-muted">{last}</span>
+          </StaggerItem>
+        );
+      })}
     </Stagger>
   );
+}
+
+/** Markdown backticks, removed. The rows style their own code. */
+function stripCode(text: string): string {
+  return text.replace(/`/g, "");
 }
 
 /** Numbered cards. `emphasise` gives one of them the accent treatment. */
