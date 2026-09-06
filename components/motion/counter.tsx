@@ -96,7 +96,10 @@ export function Counter({ to, prefix = "", suffix = "", className }: CounterProp
         // width of the final number before the first digit appears.
         <span aria-hidden className="inline-grid tabular-nums">
           <span className="invisible col-start-1 row-start-1">{final}</span>
-          <span className="col-start-1 row-start-1">
+          {/* Right-aligned inside the reserved box, so the slack while the
+              number is still short lands next to the preceding space rather
+              than between the number and whatever punctuation follows it. */}
+          <span className="col-start-1 row-start-1 text-right">
             {prefix}
             <motion.span>{text}</motion.span>
             {suffix}
