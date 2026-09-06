@@ -43,6 +43,10 @@ export const site = {
   /**
    * PLACEHOLDER. The live address of this site, once you have a domain.
    * Used for social sharing previews. Keep the https:// and no trailing slash.
+   *
+   * Leave it as-is until you buy a domain: while it says example.com the site
+   * uses whatever address your host gave the deploy, so nothing is broken in
+   * the meantime.
    */
   url: "https://example.com",
 

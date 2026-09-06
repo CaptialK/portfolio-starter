@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { site } from "@/content/site";
+import { siteUrl } from "@/lib/site-url";
 import { getProjectSlugs } from "@/lib/projects";
 import { guideIsVisible } from "@/lib/guide";
 
@@ -20,7 +20,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   return routes.map((route) => ({
-    url: `${site.url}${route}`,
+    url: `${siteUrl()}${route}`,
     lastModified: new Date(),
   }));
 }
