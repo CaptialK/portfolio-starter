@@ -78,7 +78,10 @@ page's own black at low opacity, not a new color.
 
 - Mobile first. Design and check at 375px before desktop.
 - Every image goes through `next/image` with real `alt` text. No bare `<img>`.
-- Content lives in `content/` as `.mdx` or `.ts`. Never hard-code copy into a component.
+- Projects live in `projects/<slug>/`. Never hardcode a case study in `app/`. To
+  add or change a project, edit its folder.
+- Other content lives in `content/` as `.mdx` or `.ts`. Never hard-code copy
+  into a component.
 - Every interactive element must be reachable and operable by keyboard.
 - No animations, gradients, custom cursors, or decorative motion unless asked for.
   The one exception already in the codebase is the `[data-reveal]` page-load
