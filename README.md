@@ -6,6 +6,16 @@ Next.js 16, Tailwind 4, content in Markdown, deployed on Vercel.
 It ships with the seven-day crash course and the Day 0 setup guide that go with
 it, at `/guide`.
 
+## Start from this
+
+This is a template repository. Click **Use this template** at the top of
+[github.com/CaptialK/portfolio-starter](https://github.com/CaptialK/portfolio-starter),
+name your copy `portfolio`, and you get a fresh repo of your own with none of
+this one's history. Then clone that.
+
+Don't fork it. A fork stays tied to this one, and you want somewhere of your own
+to push.
+
 ## Run it
 
 You need [Node.js](https://nodejs.org) (LTS) and [Git](https://git-scm.com).
@@ -13,7 +23,7 @@ If you have never installed either, read `/guide/setup` instead of this file —
 it explains every step, including what to do when one of them fails.
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/portfolio.git
+git clone https://github.com/YOUR-USERNAME/portfolio.git   # your copy, made with "Use this template"
 cd portfolio
 npm install
 npm run dev
