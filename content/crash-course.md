@@ -135,19 +135,20 @@ Pick the three that show different things:
 ---
 
 ## section: scaffold
-### Day 1: scaffold it, push it, deploy it. Same day.
+### Day 1: take your copy, run it, deploy it. Same day.
+
+Vinson built the starter. You take your own copy of it on GitHub, so from here on it's your repo, your Vercel, your commits.
 
 ```
-npx create-next-app@latest portfolio
-→ Yes, use recommended defaults (TypeScript, ESLint, Tailwind CSS, App Router, AGENTS.md)
+# on github.com: open the starter repo → Use this template → name it portfolio
+git clone https://github.com/YOU/portfolio.git
 cd portfolio
-npm install @tanstack/react-query motion
-npm run dev
-# open http://localhost:3000
+npm install        # fetch the packages (they're not in Git)
+npm run dev        # open http://localhost:3000
 ```
 
-1. **Push to GitHub.** Source Control panel → Publish Branch (first time). After that, the five git commands.
-2. **Import on Vercel.** vercel.com → Add New → Project → pick the repo → Deploy. Defaults are fine.
+1. **Use this template.** Not a fork, not a zip. A fresh repo under your account with the starter's files and none of Vinson's history.
+2. **Import on Vercel.** vercel.com → Add New → Project → pick your repo → Deploy. Defaults are fine. Your account, your URL.
 3. **You're live.** A real URL on Day 1. Everything after this is iteration on a site that already exists.
 
 Also on Day 1: fill in CLAUDE.md. Do it before the first real build prompt.
@@ -228,7 +229,7 @@ Example:
 - Left-align all body text.
 - No animations, gradients, or custom cursors unless I ask.
 - Every image goes through next/image.
-- Content lives in /content as .mdx files.
+- Projects live in projects/<slug>/. Never hardcode a case study in app/.
 - After each change, tell me which files you edited.
 ```
 
@@ -272,11 +273,11 @@ If it needs real data from an API, that's what TanStack Query is for. Otherwise,
 | Day | Title | What happens |
 |---|---|---|
 | 0 | Install | Everything on the install list. Accounts made. Versions print. |
-| 1 | Scaffold + deploy | create-next-app, push, Vercel. Fill in CLAUDE.md. Site map in Figma. |
+| 1 | Clone + deploy | Use this template, clone, npm install, Vercel. Fill in CLAUDE.md. Site map in Figma. |
 | 2 | Write | Three case studies, in a doc, using the anatomy template. |
 | 3 | Design | Home + case-study template in Figma. Mobile first. Type and spacing scales set. |
 | 4 | Build the shell | Home and the case-study template with Claude Code. Screen by screen. |
-| 5 | Fill it | Three case studies as MDX. About page. Real images. |
+| 5 | Fill it | Three project folders in projects/. About page. Real images. |
 | 6 | Quality pass | The reject list, every page. Fix until it passes. |
 | 7 | Launch | Domain pointed. Send the link to five people. Ask what confused them. |
 
@@ -489,6 +490,17 @@ Each of these assumes Claude Code is open in the panel with your project folder 
 - Add the folder first, prompt second. Claude does better when the files exist.
 - One prompt, one page. Don't ask for three case studies in one go.
 - Save, look, then decide. Never approve a change you haven't seen at phone width.
+
+## quickstart: hide-guide
+### When you're done with this guide
+
+This guide lives inside your site so you could read it while building. It doesn't belong on your public portfolio. When you're ready, open `site.config.ts` and change one word:
+
+```
+showGuide: true   →   showGuide: false
+```
+
+Save, then `git add .` / `git commit -m "hide guide"` / `git push`. The guide disappears from your live site. It stays at `localhost:3000/guide` whenever you run the dev server, cookbook included, for as long as you want it.
 
 ---
 
