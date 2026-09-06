@@ -36,20 +36,26 @@ export function ProjectImage({
 
   if (!inside || !fs.existsSync(file)) {
     return (
-      <p className="my-step-4 max-w-measure rounded-lg border border-line bg-panel p-step-4 text-xs text-muted">
+      <span className="my-step-4 block max-w-measure rounded-lg border border-line bg-panel p-step-4 text-xs text-muted">
         No image at{" "}
         <code className="font-mono text-accent">
           projects/{slug}/{relative || "(no path given)"}
         </code>
         . Check the file name matches exactly, including capitals.
-      </p>
+      </span>
     );
   }
 
   const { width, height } = imageSize(file);
 
+  // Spans, not <figure>/<figcaption>. Markdown puts an image inside a
+  // paragraph — either on its own or mid-sentence, and the template shows both
+  // — and a <figure> is not allowed inside a <p>. The browser silently moves
+  // it, the server and client then disagree about the shape of the page, and
+  // React throws a hydration error. A span is legal in either position and
+  // looks identical.
   return (
-    <figure className="my-step-4">
+    <span className="my-step-4 block">
       <Image
         src={mediaUrl(slug, relative)}
         alt={alt}
@@ -59,8 +65,12 @@ export function ProjectImage({
         className="h-auto w-full rounded-lg border border-line bg-panel"
       />
       {alt && (
-        <figcaption className="mt-step-2 text-xs text-muted">{alt}</figcaption>
+        // The alt text already says this to a screen reader; showing it as a
+        // caption as well would read it out twice.
+        <span aria-hidden className="mt-step-2 block text-xs text-muted">
+          {alt}
+        </span>
       )}
-    </figure>
+    </span>
   );
 }

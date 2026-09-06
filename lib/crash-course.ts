@@ -188,3 +188,121 @@ export function getPromptsIntro(): string {
   const { body } = getSection("quickstart", "prompts");
   return body.split("\n**Prompt")[0].trim();
 }
+
+/* ---------------------------------------------------------------------------
+   Turning a section's Markdown into the shapes the course panels need.
+
+   The course text stays plain Markdown so it's readable and editable on its
+   own. These read the shapes back out of it — a table, a numbered list, a
+   checklist — so a panel can lay them out properly instead of dumping a wall
+   of prose. Nothing here rewrites the words.
+   ------------------------------------------------------------------------- */
+
+/** The `- key: value` lines in the `meta` section. */
+export function getMeta(): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const line of getSection("meta", "meta").body.split("\n")) {
+    const match = /^-\s*([\w-]+)\s*:\s*(.+)$/.exec(line.trim());
+    if (match) out[match[1]] = match[2].trim();
+  }
+  return out;
+}
+
+export type Row = { cells: string[] };
+
+/** A Markdown pipe table. The `|---|---|` line is dropped. */
+export function parseTable(markdown: string): { headers: string[]; rows: Row[] } {
+  const lines = markdown
+    .split("\n")
+    .map((l) => l.trim())
+    .filter((l) => l.startsWith("|"));
+
+  const cells = (line: string) =>
+    line.split("|").slice(1, -1).map((c) => c.trim());
+
+  if (lines.length === 0) return { headers: [], rows: [] };
+
+  return {
+    headers: cells(lines[0]),
+    rows: lines
+      .slice(1)
+      .filter((l) => !/^\|[\s:|-]+\|$/.test(l))
+      .map((l) => ({ cells: cells(l) })),
+  };
+}
+
+export type Labelled = { label: string; body: string };
+
+/** `1. **Label** — body` or `1. **Label.** body`. */
+export function parseOrdered(markdown: string): Labelled[] {
+  const out: Labelled[] = [];
+  for (const line of markdown.split("\n")) {
+    const match = /^\s*\d+\.\s+\*\*(.+?)\*\*\s*(?:[—–-]\s*)?(.*)$/.exec(line);
+    if (match) out.push({ label: match[1].replace(/\.$/, ""), body: match[2].trim() });
+  }
+  return out;
+}
+
+/** `- [ ] **Label** — body`. */
+export function parseChecklist(markdown: string): Labelled[] {
+  const out: Labelled[] = [];
+  for (const line of markdown.split("\n")) {
+    const match = /^\s*-\s*\[[ x]\]\s*\*\*(.+?)\*\*\s*(?:[—–-]\s*)?(.*)$/.exec(line);
+    if (match) out.push({ label: match[1], body: match[2].trim() });
+  }
+  return out;
+}
+
+/** Plain `- item` lines, ignoring checklists and everything else. */
+export function parseBullets(markdown: string): string[] {
+  return markdown
+    .split("\n")
+    .map((l) => /^\s*-\s+(?!\[)(.+)$/.exec(l)?.[1]?.trim())
+    .filter((l): l is string => Boolean(l));
+}
+
+/** `**Heading**` followed by its own bullets, repeated. */
+export function parseGroups(markdown: string): { title: string; items: string[] }[] {
+  const groups: { title: string; items: string[] }[] = [];
+  for (const line of markdown.split("\n")) {
+    const heading = /^\*\*(.+?)\*\*\s*$/.exec(line.trim());
+    if (heading) {
+      groups.push({ title: heading[1], items: [] });
+      continue;
+    }
+    const bullet = /^\s*-\s+(.+)$/.exec(line);
+    if (bullet && groups.length) groups[groups.length - 1].items.push(bullet[1].trim());
+  }
+  return groups.filter((g) => g.items.length > 0);
+}
+
+/** Every `> quoted` line, joined per block. */
+export function parseQuotes(markdown: string): string[] {
+  const quotes: string[] = [];
+  let current: string[] = [];
+  for (const line of markdown.split("\n")) {
+    const quoted = /^\s*>\s?(.*)$/.exec(line);
+    if (quoted) current.push(quoted[1]);
+    else if (current.length) {
+      quotes.push(current.join(" ").trim());
+      current = [];
+    }
+  }
+  if (current.length) quotes.push(current.join(" ").trim());
+  return quotes.filter(Boolean);
+}
+
+/** Paragraphs that aren't a list, table, quote or fence. */
+export function parseProse(markdown: string): string[] {
+  return withoutFences(markdown)
+    .split("\n")
+    .map((l) => l.trim())
+    .filter(
+      (l) =>
+        l &&
+        !l.startsWith("|") &&
+        !l.startsWith(">") &&
+        !l.startsWith("-") &&
+        !/^\d+\./.test(l),
+    );
+}

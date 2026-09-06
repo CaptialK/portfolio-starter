@@ -36,7 +36,7 @@ export default function SetupGuidePage() {
     <>
       <div className="mx-auto flex max-w-page items-center justify-between gap-step-3 px-step-4 pt-step-4 md:px-step-5">
         <Link href="/guide" className="font-mono text-xs text-muted no-underline hover:text-ink">
-          ← Guide
+          ← The course
         </Link>
         <WordsDrawer />
       </div>

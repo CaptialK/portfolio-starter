@@ -1,178 +1,494 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+
+import {
+  getMeta,
+  getSection,
+  fencedBlocks,
+  parseBullets,
+  parseChecklist,
+  parseGroups,
+  parseOrdered,
+  parseProse,
+  parseQuotes,
+  parseTable,
+} from "@/lib/crash-course";
+
 import { WordsDrawer } from "@/components/guide/words-drawer";
+import { CourseRail } from "@/components/guide/course-rail";
+import {
+  Bullets,
+  CodeBlock,
+  Columns,
+  NumberedCards,
+  Panel,
+  Quote,
+  TableRows,
+  stripEmphasis,
+} from "@/components/guide/course/panel";
+import { DayDots } from "@/components/guide/course/day-dots";
+import { DevLoop } from "@/components/guide/course/dev-loop";
+import { DailyLoop } from "@/components/guide/course/daily-loop";
+import { Prompting } from "@/components/guide/course/prompting";
+import { SevenDays } from "@/components/guide/course/seven-days";
+
+import { ScrollProgress } from "@/components/motion/scroll-progress";
+import { Reveal } from "@/components/motion/reveal";
+import { Stagger, StaggerItem } from "@/components/motion/stagger";
+import { Hoverable } from "@/components/motion/hoverable";
+import { Terminal } from "@/components/motion/terminal";
+import { Counter } from "@/components/motion/counter";
+import { Check } from "@/components/motion/check";
 
 export const metadata: Metadata = {
-  title: "Guide",
+  title: "The crash course",
   description:
-    "The Day 0 setup walkthrough, the quick start, and the motion cookbook.",
+    "Ship it in 7 days. You design. The AI builds. You decide what's good enough.",
 };
 
 /**
- * The front door of the guide.
+ * The crash course, as a page.
  *
- * Written for somebody who has never opened a terminal and isn't planning to
- * learn to code. Every sentence here should survive the test: could you read it
- * out loud to a designer and have them nod, or would they stop and ask what a
- * word meant?
+ * Every word comes out of content/crash-course.md. That file is the only copy;
+ * this one is the layout and nothing else. If a sentence is wrong, it's wrong
+ * in the Markdown.
  *
- * All of this is scaffolding, not portfolio. When it has done its job, delete
- * `app/guide/`, `components/guide/`, `components/cookbook/`, `content/guide/`,
- * `content/glossary.ts` and the `/guide` entry in `content/site.ts`. Nothing
- * else points at them.
+ * Section ids here are the ids in that file, so `/guide#reject-list` lands on
+ * the reject list.
  */
-
-const ROUTES = [
-  {
-    href: "/guide/setup",
-    eyebrow: "Day 0",
-    title: "The setup walkthrough",
-    blurb:
-      "Every download and every command, in order, for a designer who has never opened a terminal. Tick things off as you go; the page remembers where you got to.",
-    meta: "12 sections · 60–90 minutes · macOS",
-  },
-  {
-    href: "/guide/start",
-    eyebrow: "Day 5",
-    title: "Quick start",
-    blurb:
-      "How your projects get onto the site: add a folder, get a page. Plus four prompts to paste when you want Claude to write or design one.",
-    meta: "7 sections · about 10 minutes",
-  },
-  {
-    href: "/guide/motion",
-    eyebrow: "Day 4 →",
-    title: "The motion cookbook",
-    blurb:
-      "Every bit of movement on this site, running, with the words that ask for it. Point at one by name instead of describing a feeling.",
-    meta: "12 pieces · look before you ask",
-  },
+/**
+ * The panels, in order, for the rail on the right. Kept beside the layout so
+ * adding a panel and forgetting its dot isn't possible without noticing.
+ */
+const RAIL = [
+  { id: "meta", title: "Ship it in 7 days" },
+  { id: "deal", title: "The deal" },
+  { id: "why-not-squarespace", title: "Why not Squarespace" },
+  { id: "stack", title: "The stack" },
+  { id: "install", title: "Install" },
+  { id: "dev-server-loop", title: "The dev server" },
+  { id: "content-first", title: "No case studies, no site" },
+  { id: "case-study-anatomy", title: "Anatomy" },
+  { id: "figma-first", title: "Figma first" },
+  { id: "scaffold", title: "Take your copy" },
+  { id: "git", title: "Git" },
+  { id: "loop", title: "The loop" },
+  { id: "prompting", title: "Prompting" },
+  { id: "claude-md", title: "CLAUDE.md" },
+  { id: "reject-list", title: "The reject list" },
+  { id: "live-prototypes", title: "Live prototypes" },
+  { id: "seven-days", title: "Seven days" },
+  { id: "done", title: "Done means" },
 ];
 
-/** The two jobs worth handing straight to Claude. Copy the box, paste, send. */
-const PROMPTS = [
-  {
-    when: "When you want to understand one",
-    why: "It writes an explanation into the files themselves, so it's there next time you look.",
-    text: `Open components/motion/Reveal.tsx and components/motion/Stagger.tsx. Add inline comments explaining every line to someone who has never written React. Then, in plain language in the chat, explain: what a variant is, what whileInView does, and why Stagger needs both a parent and a child component. Do not change any behavior.`,
-  },
-  {
-    when: "When you want it on your own pages",
-    why: "It shows you each change before making it, so nothing lands that you haven't looked at.",
-    text: `Read components/motion/ and /guide/motion. Now apply three things to the real portfolio pages, using only the existing library: Reveal on the homepage hero, Stagger + Hoverable on the project card grid, and Reveal on each case study's section headings. Nothing else. Match the timing tokens exactly. Show me the diff for each file before applying. After: run npm run build and tell me what to look at on my phone.`,
-  },
-];
+export default function CoursePage() {
+  const meta = getMeta();
+  const s = (id: string) => getSection("section", id);
 
-export default function GuidePage() {
+  const deal = s("deal");
+  const why = s("why-not-squarespace");
+  const stack = s("stack");
+  const install = s("install");
+  const devLoop = s("dev-server-loop");
+  const contentFirst = s("content-first");
+  const anatomy = s("case-study-anatomy");
+  const figma = s("figma-first");
+  const scaffold = s("scaffold");
+  const git = s("git");
+  const loop = s("loop");
+  const prompting = s("prompting");
+  const claudeMd = s("claude-md");
+  const reject = s("reject-list");
+  const prototypes = s("live-prototypes");
+  const sevenDays = s("seven-days");
+  const done = s("done");
+
+  const promptQuotes = parseQuotes(prompting.body);
+
   return (
-    <div className="mx-auto max-w-page px-step-4 md:px-step-5">
-      <header className="py-step-5">
-        <div className="mb-step-3 flex items-center justify-between gap-step-3">
-          <p className="font-mono text-xs tracking-[0.12em] text-accent uppercase">
-            Start here
+    <>
+      <ScrollProgress />
+      <CourseRail sections={RAIL} />
+
+      {/* ------------------------------------------------------------ meta */}
+      <section
+        id="meta"
+        data-course-panel
+        data-course-title="Ship it in 7 days"
+        className="course-panel flex min-h-svh items-center py-step-6"
+      >
+        <div className="mx-auto w-full max-w-page px-step-4 md:px-step-5">
+          <div className="mb-step-5 flex items-center justify-between gap-step-3">
+            <p className="font-mono text-xs tracking-[0.12em] text-accent uppercase">
+              Day 0 → Day 7
+            </p>
+            <WordsDrawer />
+          </div>
+
+          <Reveal mode="settle">
+            <h1 className="mb-step-4 max-w-measure text-2xl text-ink">
+              {meta.title}
+            </h1>
+          </Reveal>
+          <Reveal mode="settle" delay={0.08}>
+            <p className="mb-step-6 max-w-measure text-md text-ink/85">
+              {meta.subtitle}
+            </p>
+          </Reveal>
+
+          <DayDots />
+
+          <p className="mt-step-5 font-mono text-xs text-muted">
+            Scroll, or press ↓. The dots fill as you go.
           </p>
-          <WordsDrawer />
         </div>
+      </section>
 
-        <h1 className="mb-step-3 max-w-measure text-xl text-ink">
-          From nothing installed to a site that&rsquo;s actually online.
-        </h1>
-        <p className="max-w-measure text-md text-ink/85">
-          What you have is a working site wearing placeholder words and a
-          placeholder look. Every visual decision on it is still yours. These
-          pages are how you make it yours, and they live inside the project
-          folder (where all your files are) so they can never go out of date.
-        </p>
-      </header>
+      {/* ------------------------------------------------------------ deal */}
+      <Panel id="deal" n={1} eyebrow="Ground rules" heading={deal.heading}>
+        <Columns groups={parseGroups(deal.body)} strikeSecond />
+        <Quote>{parseQuotes(deal.body)[0]}</Quote>
+      </Panel>
 
-      <ul className="m-0 grid list-none grid-cols-1 gap-step-3 p-0 md:grid-cols-3">
-        {ROUTES.map((route) => (
-          <li key={route.href}>
-            <Link
-              href={route.href}
-              className="group flex h-full flex-col rounded-lg border border-line bg-panel p-step-4 no-underline"
-            >
-              <p className="mb-step-2 font-mono text-xs tracking-[0.12em] text-accent uppercase">
-                {route.eyebrow}
-              </p>
-              <h2 className="mb-step-2 font-display text-lg text-ink transition-colors group-hover:text-accent">
-                {route.title}
-              </h2>
-              <p className="mb-step-3 flex-1 text-sm text-ink/85">
-                {route.blurb}
-              </p>
-              <p className="font-mono text-xs text-muted">{route.meta}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {/* --------------------------------------------- why-not-squarespace */}
+      <Panel
+        id="why-not-squarespace"
+        n={2}
+        eyebrow="The argument"
+        heading={why.heading}
+      >
+        <NumberedCards items={parseOrdered(why.body)} />
+      </Panel>
 
-      <section className="mt-step-5 border-t border-line py-step-5">
-        <h2 className="mb-step-3 text-lg text-ink">
-          Getting it onto your own computer
-        </h2>
-        <p className="mb-step-3 max-w-measure text-sm text-ink/85">
-          Four lines, typed into the terminal (a text box for commands). The
-          setup walkthrough explains what each one is for, and what to do when
-          one of them goes wrong.
-        </p>
-        <p className="mb-step-2 max-w-measure font-mono text-xs text-muted">
-          Copies the files down, moves into the folder, fetches what the site
-          needs, then opens it at localhost:3000.
-        </p>
-        <pre className="mb-step-4 max-w-measure overflow-x-auto rounded-lg border border-line bg-black p-step-4 font-mono text-xs text-accent">
-          {[
-            "git clone https://github.com/YOUR-USERNAME/portfolio.git",
-            "cd portfolio",
-            "npm install",
-            "npm run dev",
-          ].join("\n")}
-        </pre>
-        <a
-          href="/downloads/portfolio-crash-course.pptx"
-          className="font-mono text-xs text-accent"
-          download
+      {/* ----------------------------------------------------------- stack */}
+      <Panel id="stack" n={3} eyebrow="Vocabulary" heading={stack.heading}>
+        <Stagger
+          as="ul"
+          className="m-0 grid list-none gap-step-3 p-0 sm:grid-cols-2 lg:grid-cols-3"
         >
-          Download the deck (.pptx) ↓
-        </a>
-      </section>
-
-      <section className="border-t border-line py-step-5">
-        <h2 className="mb-step-3 text-lg text-ink">Asking for the movement</h2>
-        <p className="mb-step-4 max-w-measure text-sm text-ink/85">
-          Twelve pieces of movement are already built and named — the same idea
-          as a component in Figma, but for the way things arrive and respond.
-          Naming one gets you the exact movement used everywhere else on the
-          site. Describing a feeling gets you a new one that nobody chose.{" "}
-          <Link href="/guide/motion" className="text-accent">
-            Watch them running first
-          </Link>
-          , then use these.
-        </p>
-
-        <ul className="m-0 grid list-none gap-step-3 p-0 lg:grid-cols-2">
-          {PROMPTS.map((prompt) => (
-            <li
-              key={prompt.when}
-              className="flex min-w-0 flex-col rounded-lg border border-line bg-panel p-step-4"
-            >
-              <h3 className="mb-step-1 font-sans text-sm font-semibold tracking-normal text-ink">
-                {prompt.when}
-              </h3>
-              <p className="mb-step-3 text-xs text-muted">{prompt.why}</p>
-              <pre className="m-0 overflow-x-auto rounded border border-line bg-black p-step-3 font-mono text-xs whitespace-pre-wrap text-ink/85">
-                {prompt.text}
-              </pre>
-            </li>
+          {parseTable(stack.body).rows.map((row) => (
+            <StaggerItem as="li" key={row.cells[0]} className="min-w-0">
+              <Hoverable className="h-full rounded-lg border border-line bg-panel p-step-4">
+                <h3 className="mb-step-2 font-mono text-sm text-accent">
+                  {row.cells[0]}
+                </h3>
+                <p className="text-xs text-muted">{row.cells[1]}</p>
+              </Hoverable>
+            </StaggerItem>
           ))}
-        </ul>
+        </Stagger>
+      </Panel>
 
-        <p className="mt-step-4 max-w-measure text-xs text-muted">
-          Both of these are yours to run, in the Claude panel inside VS Code.
-          That is the whole point — you decide what happens and whether it was
-          any good.
+      {/* --------------------------------------------------------- install */}
+      <Panel id="install" n={4} eyebrow="Day 0" heading={install.heading}>
+        <div className="grid gap-step-4 lg:grid-cols-2">
+          <div className="min-w-0">
+            <TableRows rows={parseTable(install.body).rows} />
+          </div>
+          <div className="min-w-0">
+            <p className="mb-step-3 text-sm text-ink/85">
+              {stripEmphasis(parseProse(install.body).slice(-1)[0] ?? "")}
+            </p>
+            <Terminal
+              lines={(fencedBlocks(install.body)[0] ?? "")
+                .split("\n")
+                .filter(Boolean)
+                .map((text) => ({ type: "cmd" as const, text }))}
+            />
+          </div>
+        </div>
+      </Panel>
+
+      {/* ------------------------------------------------- dev-server-loop */}
+      <Panel
+        id="dev-server-loop"
+        n={5}
+        eyebrow="The method"
+        heading={devLoop.heading}
+      >
+        <DevLoop
+          steps={parseOrdered(devLoop.body)}
+          after={parseProse(devLoop.body)[0] ?? ""}
+        />
+        <Quote>{parseQuotes(devLoop.body)[0]}</Quote>
+      </Panel>
+
+      {/* --------------------------------------------------- content-first */}
+      <Panel
+        id="content-first"
+        n={6}
+        eyebrow="Before any code"
+        heading={contentFirst.heading}
+      >
+        <Reveal>
+          <p className="mb-step-5 max-w-measure text-md text-ink">
+            <Counter to={3} /> case studies. Not 6. Three great ones,{" "}
+            <span className="whitespace-nowrap">
+              <Counter to={500} />–<Counter to={800} />
+            </span>{" "}
+            words each, written in a doc first. Not in the site.
+          </p>
+        </Reveal>
+        <NumberedCards items={parseOrdered(contentFirst.body)} />
+        <Quote>{parseQuotes(contentFirst.body)[0]}</Quote>
+      </Panel>
+
+      {/* ---------------------------------------------- case-study-anatomy */}
+      <Panel
+        id="case-study-anatomy"
+        n={7}
+        eyebrow="Template"
+        heading={anatomy.heading}
+      >
+        <NumberedCards items={parseOrdered(anatomy.body)} emphasise={4} />
+        <p className="mt-step-3 font-mono text-xs text-muted">
+          Four is the one that gets you hired.
         </p>
+      </Panel>
+
+      {/* ----------------------------------------------------- figma-first */}
+      <Panel id="figma-first" n={8} eyebrow="Day 3" heading={figma.heading}>
+        <Bullets items={parseBullets(figma.body)} />
+        <Reveal>
+          <p className="mt-step-4 max-w-measure text-sm text-ink/85">
+            {stripEmphasis(parseProse(figma.body).slice(-1)[0] ?? "")}
+          </p>
+        </Reveal>
+      </Panel>
+
+      {/* -------------------------------------------------------- scaffold */}
+      <Panel id="scaffold" n={9} eyebrow="Day 1" heading={scaffold.heading}>
+        <Reveal>
+          <p className="mb-step-4 max-w-measure text-sm text-ink/85">
+            {parseProse(scaffold.body)[0]}
+          </p>
+        </Reveal>
+        <div className="grid gap-step-4 lg:grid-cols-2">
+          <div className="min-w-0">
+            <Terminal
+              title="zsh"
+              lines={(fencedBlocks(scaffold.body)[0] ?? "")
+                .split("\n")
+                .filter(Boolean)
+                .map((text) => ({
+                  type: text.trim().startsWith("#")
+                    ? ("comment" as const)
+                    : ("cmd" as const),
+                  text,
+                }))}
+            />
+          </div>
+          <div className="min-w-0">
+            <NumberedCards items={parseOrdered(scaffold.body)} columns={2} />
+          </div>
+        </div>
+      </Panel>
+
+      {/* ------------------------------------------------------------- git */}
+      <Panel id="git" n={10} eyebrow="Plumbing" heading={git.heading}>
+        <div className="grid gap-step-4 lg:grid-cols-2">
+          <div className="min-w-0">
+            <TableRows rows={parseTable(git.body).rows} mono />
+          </div>
+          <div className="min-w-0">
+            <h3 className="mb-step-3 font-mono text-xs tracking-[0.12em] text-muted uppercase">
+              Rules
+            </h3>
+            <Stagger as="ul" className="m-0 list-none space-y-step-2 p-0">
+              {parseBullets(git.body).map((rule) => (
+                <StaggerItem as="li" key={rule} className="text-sm text-ink/85">
+                  {stripEmphasis(rule)}
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </div>
+        </div>
+        <Quote>{parseQuotes(git.body)[0]}</Quote>
+      </Panel>
+
+      {/* ------------------------------------------------------------ loop */}
+      <Panel id="loop" n={11} eyebrow="The method" heading={loop.heading}>
+        <DailyLoop steps={parseOrdered(loop.body)} />
+        <Quote>{parseQuotes(loop.body)[0]}</Quote>
+      </Panel>
+
+      {/* ------------------------------------------------------- prompting */}
+      <Panel
+        id="prompting"
+        n={12}
+        eyebrow="Directing"
+        heading={prompting.heading}
+      >
+        <div className="grid gap-step-4 lg:grid-cols-2">
+          <div className="min-w-0">
+            <Prompting bad={promptQuotes[0] ?? ""} good={promptQuotes[1] ?? ""} />
+          </div>
+          <div className="min-w-0">
+            <h3 className="mb-step-3 font-mono text-xs tracking-[0.12em] text-muted uppercase">
+              Habits
+            </h3>
+            <Stagger as="ul" className="m-0 list-none space-y-step-2 p-0">
+              {parseBullets(prompting.body).map((habit) => (
+                <StaggerItem as="li" key={habit} className="text-sm text-ink/85">
+                  {stripEmphasis(habit)}
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </div>
+        </div>
+        <Quote>{promptQuotes[2] ?? ""}</Quote>
+      </Panel>
+
+      {/* ------------------------------------------------------- claude-md */}
+      <Panel id="claude-md" n={13} eyebrow="Day 1" heading={claudeMd.heading}>
+        <div className="grid gap-step-4 lg:grid-cols-2">
+          <div className="min-w-0">
+            <Reveal>
+              <p className="mb-step-4 max-w-measure text-sm text-ink/85">
+                {parseProse(claudeMd.body)[0]}
+              </p>
+            </Reveal>
+            <Stagger as="ul" className="m-0 list-none space-y-step-2 p-0">
+              {parseBullets(claudeMd.body).map((item) => (
+                <StaggerItem as="li" key={item} className="text-sm text-ink/85">
+                  {stripEmphasis(item)}
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </div>
+          <div className="min-w-0">
+            <Reveal>
+              <CodeBlock title="CLAUDE.md">
+                {fencedBlocks(claudeMd.body)[0] ?? ""}
+              </CodeBlock>
+            </Reveal>
+          </div>
+        </div>
+      </Panel>
+
+      {/* ----------------------------------------------------- reject-list */}
+      <Panel id="reject-list" n={14} eyebrow="Day 6" heading={reject.heading}>
+        <div className="grid max-w-measure gap-step-3">
+          {parseChecklist(reject.body).map((item, i) => (
+            <Check
+              key={item.label}
+              storageKey={`reject-list:${i}`}
+              label={item.label}
+              hint={item.body}
+            />
+          ))}
+        </div>
+        <Quote>{parseQuotes(reject.body)[0]}</Quote>
+      </Panel>
+
+      {/* ------------------------------------------------- live-prototypes */}
+      <Panel
+        id="live-prototypes"
+        n={15}
+        eyebrow="After launch"
+        heading={prototypes.heading}
+      >
+        <div className="grid gap-step-4 lg:grid-cols-2">
+          <div className="min-w-0">
+            <Reveal>
+              <p className="mb-step-4 max-w-measure text-sm text-ink/85">
+                {parseProse(prototypes.body)[0]}
+              </p>
+            </Reveal>
+            <Reveal>
+              <CodeBlock title="Tell Claude Code">
+                {parseQuotes(prototypes.body)[0] ?? ""}
+              </CodeBlock>
+            </Reveal>
+          </div>
+          <div className="min-w-0">
+            <h3 className="mb-step-3 font-mono text-xs tracking-[0.12em] text-muted uppercase">
+              Why it works
+            </h3>
+            <Stagger as="ul" className="m-0 list-none space-y-step-2 p-0">
+              {parseBullets(prototypes.body).map((item) => (
+                <StaggerItem as="li" key={item} className="text-sm text-ink/85">
+                  {stripEmphasis(item)}
+                </StaggerItem>
+              ))}
+            </Stagger>
+          </div>
+        </div>
+      </Panel>
+
+      {/* ------------------------------------------------------ seven-days */}
+      <Panel
+        id="seven-days"
+        n={16}
+        eyebrow="The calendar"
+        heading={sevenDays.heading}
+      >
+        <SevenDays rows={parseTable(sevenDays.body).rows} />
+        <p className="mt-step-3 font-mono text-xs text-muted">
+          Pick a day to open it. Drag the row sideways on a phone.
+        </p>
+      </Panel>
+
+      {/* ------------------------------------------------------------ done */}
+      <Panel id="done" n={17} eyebrow="Finish line" heading={done.heading}>
+        <Columns groups={parseGroups(done.body)} />
+        <Reveal delay={0.2}>
+          <p className="mt-step-5 max-w-measure font-display text-md text-accent">
+            Refine for months. Ship in a week.
+          </p>
+        </Reveal>
+      </Panel>
+
+      {/* ------------------------------------------------------- where next */}
+      <section className="border-t border-line py-step-6">
+        <div className="mx-auto w-full max-w-page px-step-4 md:px-step-5">
+          <h2 className="mb-step-4 text-lg text-ink">Where to go next</h2>
+          <ul className="m-0 grid list-none gap-step-3 p-0 md:grid-cols-3">
+            {[
+              {
+                href: "/guide/setup",
+                title: "The setup walkthrough",
+                blurb:
+                  "Every download and every command, in order. Start here if nothing is installed yet.",
+              },
+              {
+                href: "/guide/start",
+                title: "Quick start",
+                blurb:
+                  "How your own projects get onto the site: add a folder, get a page.",
+              },
+              {
+                href: "/guide/motion",
+                title: "The motion cookbook",
+                blurb:
+                  "Every bit of movement on this site, running, with the words that ask for it.",
+              },
+            ].map((next) => (
+              <li key={next.href}>
+                <Link
+                  href={next.href}
+                  className="group flex h-full flex-col rounded-lg border border-line bg-panel p-step-4 no-underline"
+                >
+                  <h3 className="mb-step-2 font-display text-lg text-ink transition-colors group-hover:text-accent">
+                    {next.title}
+                  </h3>
+                  <p className="text-sm text-ink/85">{next.blurb}</p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <p className="mt-step-5 font-mono text-xs">
+            <a
+              href="/downloads/portfolio-crash-course.pptx"
+              className="text-accent"
+              download
+            >
+              Download the deck (.pptx) ↓
+            </a>
+          </p>
+        </div>
       </section>
-    </div>
+    </>
   );
 }

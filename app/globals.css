@@ -150,6 +150,27 @@
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%);
   }
 
+  /* Gentle scroll-snapping for the course panels.
+
+     `proximity`, not `mandatory`: it tidies up where a scroll lands without
+     ever taking the scroll away from you. Wide screens only — a full-height
+     panel on a phone is a lot of scrolling for very little — and the class is
+     put on the page by CourseRail while that page is open, because snapping
+     has to sit on the thing that actually scrolls. */
+  @media (min-width: 64rem) {
+    .course-snap {
+      scroll-snap-type: y proximity;
+    }
+    .course-snap .course-panel {
+      scroll-snap-align: start;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .course-snap {
+      scroll-snap-type: none;
+    }
+  }
+
   /* The "Words" glossary panel in the guide's header.
 
      A real <dialog>, so the browser handles Esc, focus and the backdrop. The
