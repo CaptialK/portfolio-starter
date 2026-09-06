@@ -45,8 +45,25 @@ page's own black at low opacity, not a new color.
 ## Motion
 
 - Library: `motion` (imported from `"motion/react"`). Never `framer-motion`.
-- Timing lives in `lib/motion-tokens.ts`: `duration.fast/base/slow`, one `ease`,
-  one `spring`. Never write a raw duration or cubic-bezier in a component.
+- Timing AND distance live in `lib/motion-tokens.ts`: `duration.fast/base/slow`,
+  one `ease`, one `spring`, plus `travel` and `press`. Never write a raw
+  duration, cubic-bezier, pixel offset or scale in a component.
+- **Budget: no animation runs longer than 800ms** (`MAX_DURATION`). Two
+  deliberate exceptions, both on /guide: the dev-server loop, which repeats on
+  purpose; and Terminal, whose typing is a sequence of short reveals with a
+  Skip button.
+- **Stagger gaps stay between 40ms and 80ms**, and `gap x (n - 1) + duration.base`
+  must also fit the 800ms budget. Stagger checks both in development and warns.
+- **Nothing above the fold may animate opacity from 0.** The first frame has to
+  be readable. Use `<Reveal mode="settle">` up there — it starts visible and
+  only settles into place. `mode="enter"` (the fade) is for below the fold.
+- **One element answers to the scroll or to the cursor, never both.** Don't put
+  Reveal/StaggerItem and Hoverable on the same element — wrap, don't stack.
+- Use `useReducedMotionSafe()` from `lib/use-reduced-motion-safe.ts`, never
+  Motion's `useReducedMotion` directly. The server can't know the visitor's
+  preference, so branching markup on the raw hook causes a hydration error and
+  makes React rebuild the tree — for the people who asked for less motion.
+- Test it with `?reduce-motion=1` on any /guide URL (development only).
 - Reusable animations live in `components/motion/`. Use one of those before
   writing a new animation; the live examples are at `/guide/motion`.
 - Every animated component must check `useReducedMotion()` and render its

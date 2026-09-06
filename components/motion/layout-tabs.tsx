@@ -44,7 +44,8 @@
  */
 
 import { useId, useRef, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
 import { spring } from "@/lib/motion-tokens";
 
 type Tab = {
@@ -60,7 +61,7 @@ type LayoutTabsProps = {
 };
 
 export function LayoutTabs({ tabs, defaultId, className }: LayoutTabsProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const groupId = useId();
   const [activeId, setActiveId] = useState(defaultId ?? tabs[0]?.id);
   const buttons = useRef<Record<string, HTMLButtonElement | null>>({});

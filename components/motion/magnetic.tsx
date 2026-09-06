@@ -45,7 +45,8 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useReducedMotion, useSpring } from "motion/react";
+import { motion, useMotionValue, useSpring } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
 import { spring } from "@/lib/motion-tokens";
 
 type MagneticProps = {
@@ -61,7 +62,7 @@ export function Magnetic({
   pull = 0.25,
   className,
 }: MagneticProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const ref = useRef<HTMLSpanElement>(null);
 
   const x = useSpring(useMotionValue(0), spring);

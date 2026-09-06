@@ -50,8 +50,9 @@
  */
 
 import { useId, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
-import { duration, ease, spring } from "@/lib/motion-tokens";
+import { motion } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
+import { duration, ease, press, spring } from "@/lib/motion-tokens";
 import { useStoredFlag } from "@/lib/use-stored-flag";
 
 type CheckProps = {
@@ -71,7 +72,7 @@ export function Check({
   onChange,
   className,
 }: CheckProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const id = useId();
 
   // Three ways to hold the state, chosen by which props were passed. All three
@@ -110,7 +111,7 @@ export function Check({
           borderColor: isChecked ? "var(--color-accent)" : "var(--color-line)",
         }}
         transition={reduced ? { duration: 0 } : { duration: duration.fast, ease }}
-        whileTap={reduced ? undefined : { scale: 0.9 }}
+        whileTap={reduced ? undefined : { scale: press.control }}
         className="mt-px flex size-step-4 shrink-0 items-center justify-center rounded border peer-focus-visible:outline-2 peer-focus-visible:outline-offset-3 peer-focus-visible:outline-accent"
       >
         <svg viewBox="0 0 24 24" fill="none" className="size-step-3">

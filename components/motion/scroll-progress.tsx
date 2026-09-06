@@ -38,11 +38,12 @@
  * <ScrollProgress />
  */
 
-import { motion, useReducedMotion, useScroll, useSpring } from "motion/react";
+import { motion, useScroll, useSpring } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
 import { spring } from "@/lib/motion-tokens";
 
 export function ScrollProgress() {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const { scrollYProgress } = useScroll();
 
   // Hooks have to run in the same order every render, so this spring is created

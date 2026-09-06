@@ -19,11 +19,13 @@
  * - On text links and buttons. They have their own hover conventions; a
  *   floating button reads as a mistake.
  * - Nested inside another Hoverable. Two lifts on one pointer is mush.
+ * - On the same element as Reveal or StaggerItem. One element answers to the
+ *   scroll or to the cursor, never both — wrap the card, don't double up on it.
  *
  * PROPS
  * - children   the card's contents.
- * - lift       pixels to rise. Default 4, which is one step on the spacing
- *              scale. 8 is the most that still looks deliberate.
+ * - lift       pixels to rise. Defaults to `travel.lift`. One step on the
+ *              spacing scale; 8 is the most that still looks deliberate.
  * - as         "div" | "li" | "article". Default "div".
  * - className  passed through — put the card's own border, background and
  *              padding here.
@@ -43,8 +45,9 @@
  * </Hoverable>
  */
 
-import { motion, useReducedMotion } from "motion/react";
-import { duration, ease } from "@/lib/motion-tokens";
+import { motion } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
+import { duration, ease, press, travel } from "@/lib/motion-tokens";
 
 type HoverableProps = {
   children: React.ReactNode;
@@ -55,11 +58,11 @@ type HoverableProps = {
 
 export function Hoverable({
   children,
-  lift = 4,
+  lift = travel.lift,
   as = "div",
   className,
 }: HoverableProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
 
   if (reduced) {
     const Tag = as;
@@ -72,7 +75,7 @@ export function Hoverable({
     <Motion
       className={className}
       whileHover={{ y: -lift, boxShadow: "var(--shadow-lift)" }}
-      whileTap={{ y: -lift / 2, scale: 0.995 }}
+      whileTap={{ y: -lift / 2, scale: press.surface }}
       transition={{ duration: duration.fast, ease }}
     >
       {children}

@@ -17,16 +17,18 @@
  *
  * WHEN NOT TO USE IT
  * - For one element. That's Reveal.
- * - For more than about ten children. `gap × count` becomes a real wait, and
- *   the last item arrives long after the user started reading the first.
- *   Either lower the gap or don't stagger.
+ * - For a list long enough to blow the animation budget. gap × (n − 1) plus one
+ *   child's own animation must stay under MAX_DURATION (800ms) — that's seven
+ *   children at the default 60ms gap, or eleven at the 40ms floor. In
+ *   development this component works that out and warns you in the console.
  * - Around items that already animate themselves for another reason. Two
  *   animations on one element fight and neither reads clearly.
  *
  * PROPS — Stagger
  * - children   the StaggerItems.
  * - gap        seconds between children. Defaults to `staggerGap` in
- *              lib/motion-tokens.ts. Raise it to make a short list feel
+ *              lib/motion-tokens.ts, and must stay between MIN_STAGGER_GAP and
+ *              MAX_STAGGER_GAP (40-80ms). Raise it to make a short list feel
  *              deliberate, lower it to keep a long one brisk.
  * - delay      seconds before the first child starts. Default 0.
  * - as         "div" | "ul" | "ol". Use ul/ol when it really is a list, so it
@@ -50,8 +52,19 @@
  * </Stagger>
  */
 
-import { motion, useReducedMotion, type Variants } from "motion/react";
-import { duration, ease, staggerGap, viewport } from "@/lib/motion-tokens";
+import { Children } from "react";
+import { motion, type Variants } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
+import {
+  duration,
+  ease,
+  MAX_DURATION,
+  MAX_STAGGER_GAP,
+  MIN_STAGGER_GAP,
+  staggerGap,
+  travel,
+  viewport,
+} from "@/lib/motion-tokens";
 
 type StaggerProps = {
   children: React.ReactNode;
@@ -68,7 +81,29 @@ export function Stagger({
   as = "div",
   className,
 }: StaggerProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
+
+  // A stagger's real length is gap x (children - 1) + one child's own
+  // animation. It is easy to blow the budget without noticing, because each
+  // individual child still looks fast — so say so, loudly, in development.
+  if (process.env.NODE_ENV === "development") {
+    const count = Children.count(children);
+    const total = gap * Math.max(0, count - 1) + duration.base + delay;
+    if (gap < MIN_STAGGER_GAP || gap > MAX_STAGGER_GAP) {
+      console.warn(
+        `[Stagger] gap of ${gap * 1000}ms is outside the ${MIN_STAGGER_GAP * 1000}` +
+          `-${MAX_STAGGER_GAP * 1000}ms range. Below it the sequence stops reading ` +
+          `as one; above it the last item feels like waiting.`,
+      );
+    }
+    if (total > MAX_DURATION) {
+      console.warn(
+        `[Stagger] ${count} children at a ${gap * 1000}ms gap take ${Math.round(total * 1000)}ms ` +
+          `to finish, over the ${MAX_DURATION * 1000}ms budget. Lower the gap ` +
+          `(${MIN_STAGGER_GAP * 1000}ms is the floor) or split the list.`,
+      );
+    }
+  }
 
   if (reduced) {
     const Tag = as;
@@ -108,7 +143,7 @@ export function StaggerItem({
   as = "div",
   className,
 }: StaggerItemProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
 
   if (reduced) {
     const Tag = as;
@@ -118,7 +153,7 @@ export function StaggerItem({
   // The child names the same two states the parent does. It never sets
   // `initial` or `whileInView` — it inherits both from the parent.
   const child: Variants = {
-    hidden: { opacity: 0, y: 12 },
+    hidden: { opacity: 0, y: travel.rise },
     shown: {
       opacity: 1,
       y: 0,

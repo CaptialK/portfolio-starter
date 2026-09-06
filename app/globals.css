@@ -150,11 +150,16 @@
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%);
   }
 
-  /* Staggered page-load reveal. Applied by [data-reveal] wrappers. */
+  /* Staggered page-load reveal. Applied by [data-reveal] wrappers.
+
+     These numbers are the CSS copies of lib/motion-tokens.ts and must match it:
+     0.42s is `duration.base`, the curve is `ease`, the 0.06s steps between the
+     delays are `staggerGap`, and 0.5rem is `travel.rise`. The last child starts
+     at 0.32s and finishes at 0.74s, inside the 0.8s MAX_DURATION budget. */
   @keyframes reveal-up {
     from {
       opacity: 0;
-      transform: translateY(0.75rem);
+      transform: translateY(0.5rem); /* = travel.rise in lib/motion-tokens.ts */
     }
     to {
       opacity: 1;
@@ -162,7 +167,7 @@
     }
   }
   [data-reveal] > * {
-    animation: reveal-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation: reveal-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) backwards;
   }
   [data-reveal] > *:nth-child(1) {
     animation-delay: 0.02s;

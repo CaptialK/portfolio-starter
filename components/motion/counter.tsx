@@ -52,9 +52,9 @@ import {
   motion,
   useInView,
   useMotionValue,
-  useReducedMotion,
   useTransform,
 } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
 import { duration, ease, viewport } from "@/lib/motion-tokens";
 
 type CounterProps = {
@@ -65,7 +65,7 @@ type CounterProps = {
 };
 
 export function Counter({ to, prefix = "", suffix = "", className }: CounterProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: viewport.once, amount: viewport.amount });
 

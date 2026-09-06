@@ -53,7 +53,8 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
 import { duration, ease, viewport } from "@/lib/motion-tokens";
 
 export type TerminalLine = {
@@ -82,7 +83,7 @@ type TerminalProps = {
 };
 
 export function Terminal({ lines, title = "zsh", className }: TerminalProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: viewport.once, amount: viewport.amount });
 

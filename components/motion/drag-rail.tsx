@@ -47,7 +47,8 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { animate, motion, useMotionValue, useReducedMotion } from "motion/react";
+import { animate, motion, useMotionValue } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
 import { duration, ease } from "@/lib/motion-tokens";
 
 /** Fraction of the visible width one arrow-key press travels. */
@@ -64,7 +65,7 @@ export function DragRail({
   gap = "gap-step-3",
   className,
 }: DragRailProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const frame = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);

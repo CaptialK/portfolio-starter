@@ -49,7 +49,8 @@
  * />
  */
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
 import { duration, ease } from "@/lib/motion-tokens";
 
 type SwapProps = {
@@ -59,7 +60,7 @@ type SwapProps = {
 };
 
 export function Swap({ active, items, className }: SwapProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const keys = Object.keys(items);
 
   return (

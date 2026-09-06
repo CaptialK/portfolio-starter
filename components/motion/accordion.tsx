@@ -49,7 +49,8 @@
  */
 
 import { useId, useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotionSafe } from "@/lib/use-reduced-motion-safe";
 import { duration, ease } from "@/lib/motion-tokens";
 
 type AccordionItem = {
@@ -71,7 +72,7 @@ export function Accordion({
   single = true,
   className,
 }: AccordionProps) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const groupId = useId();
   const [open, setOpen] = useState<string[]>(defaultOpenId ? [defaultOpenId] : []);
 
