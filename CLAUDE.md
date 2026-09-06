@@ -13,6 +13,8 @@ Rules about what NOT to do are the most valuable lines in here. Add to them.
   In classes: `text-xs` `text-sm` `text-md` `text-lg` `text-xl` `text-2xl`.
 - One 64px statement per page. Never two.
 - Body text is left-aligned. Never centered, never justified.
+- The homepage opens with the work, not with an introduction. Anyone opening a
+  portfolio already knows whose it is.
 - Body text never exceeds `max-w-measure` (42rem, ~68 characters).
 
 ## Space

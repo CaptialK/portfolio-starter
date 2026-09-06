@@ -1,47 +1,54 @@
 import Link from "next/link";
-import { site } from "@/content/site";
 import { getProjects } from "@/lib/projects";
 import { ProjectCard } from "@/components/project-card";
 import { guideIsVisible } from "@/lib/guide";
 
+/** Beyond this many, the homepage sends people to /work for the rest. */
+const ON_THE_HOMEPAGE = 6;
+
 /**
- * The homepage. Three things, in this order: who you are, what you've made,
- * how to reach you. Nothing else earns its place above the fold.
+ * The homepage: the work, immediately.
+ *
+ * No introduction. Anyone opening a portfolio already knows whose it is —
+ * they came from a CV, a link, or a name they were given — so a paragraph
+ * about yourself above the fold spends their attention before showing them
+ * anything. Your name is in the header, your email is in the footer, and the
+ * about page is one click away for the people who want it.
+ *
+ * What's left is the only thing that actually argues for you.
  */
 export default function Home() {
   const projects = getProjects();
+  const shown = projects.slice(0, ON_THE_HOMEPAGE);
 
   return (
     <div className="mx-auto max-w-page px-step-4 md:px-step-5">
-      <section className="bg-grid -mx-step-4 px-step-4 py-step-6 md:-mx-step-5 md:px-step-5">
-        <div data-reveal className="max-w-measure">
-          <h1 className="mb-step-3 text-2xl text-ink">{site.name}</h1>
-          <p className="mb-step-3 font-mono text-xs tracking-[0.12em] text-accent uppercase">
-            {site.role}
-          </p>
-          <p className="mb-step-4 text-md text-ink/85">{site.tagline}</p>
-          <p className="text-sm">
-            <a href={`mailto:${site.email}`} className="text-accent">
-              {site.email}
-            </a>
-          </p>
+      <section className="bg-grid -mx-step-4 px-step-4 pt-step-6 pb-step-5 md:-mx-step-5 md:px-step-5">
+        <div data-reveal>
+          <h1 className="text-2xl text-ink">Work</h1>
         </div>
       </section>
 
-      <section className="py-step-5">
-        <div className="mb-step-4 flex items-baseline justify-between gap-step-3">
-          <h2 className="text-lg text-ink">Selected work</h2>
-          <Link href="/work" className="font-mono text-xs text-muted no-underline hover:text-ink">
-            All work →
-          </Link>
-        </div>
+      <section className="pb-step-5">
+        {shown.length > 0 ? (
+          <>
+            <ul className="m-0 grid list-none grid-cols-1 gap-step-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+              {shown.map((project) => (
+                <ProjectCard key={project.slug} project={project} />
+              ))}
+            </ul>
 
-        {projects.length > 0 ? (
-          <ul className="m-0 grid list-none grid-cols-1 gap-step-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.slice(0, 3).map((project) => (
-              <ProjectCard key={project.slug} project={project} />
-            ))}
-          </ul>
+            {projects.length > shown.length && (
+              <p className="mt-step-4">
+                <Link
+                  href="/work"
+                  className="font-mono text-xs text-muted no-underline hover:text-ink"
+                >
+                  All {projects.length} projects →
+                </Link>
+              </p>
+            )}
+          </>
         ) : (
           <p className="max-w-measure rounded-lg border border-line bg-panel p-step-4 text-sm text-muted">
             Nothing here yet. Duplicate{" "}
