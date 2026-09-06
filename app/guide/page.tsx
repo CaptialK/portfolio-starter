@@ -1,20 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { deck } from "@/content/decks/portfolio-crash-course";
+import { WordsDrawer } from "@/components/guide/words-drawer";
 
 export const metadata: Metadata = {
   title: "Guide",
   description:
-    "The seven-day crash course and the Day 0 setup guide that built this site.",
+    "The seven-day course, the Day 0 setup walkthrough, and the motion cookbook.",
 };
 
 /**
- * The guide hub: two documents and a download.
+ * The front door of the guide.
  *
- * This whole section is scaffolding for the person building the site, not part
- * of the portfolio. Once it has done its job, delete `app/guide/`,
- * `components/deck/`, `components/guide/`, `content/decks/`, `content/guide/`,
- * and the `/guide` entry in `content/site.ts`. Nothing else references them.
+ * Written for somebody who has never opened a terminal and isn't planning to
+ * learn to code. Every sentence here should survive the test: could you read it
+ * out loud to a designer and have them nod, or would they stop and ask what a
+ * word meant?
+ *
+ * All of this is scaffolding, not portfolio. When it has done its job, delete
+ * `app/guide/`, `components/guide/`, `components/cookbook/`, `content/decks/`,
+ * `content/guide/`, `content/glossary.ts` and the `/guide` entry in
+ * `content/site.ts`. Nothing else points at them.
  */
 
 const ROUTES = [
@@ -23,16 +29,38 @@ const ROUTES = [
     eyebrow: "Day 0 → Day 7",
     title: "The crash course",
     blurb:
-      "The argument, the method, the reject list, and the seven-day calendar. Read it once end to end before you install anything.",
+      "The argument, the method, the reject list, and the seven-day calendar. Read it once, end to end, before you install anything.",
     meta: `${deck.slides.length} sections · about 15 minutes`,
   },
   {
     href: "/guide/setup",
     eyebrow: "Day 0",
-    title: "The setup guide",
+    title: "The setup walkthrough",
     blurb:
-      "Every download and every command, in order, for a designer who has never opened a terminal. Ticks off as you go; progress saves in your browser.",
+      "Every download and every command, in order, for a designer who has never opened a terminal. Tick things off as you go; the page remembers where you got to.",
     meta: "12 sections · 60–90 minutes · macOS",
+  },
+  {
+    href: "/guide/motion",
+    eyebrow: "Day 4 →",
+    title: "The motion cookbook",
+    blurb:
+      "Every bit of movement on this site, running, with the words that ask for it. Point at one by name instead of describing a feeling.",
+    meta: "12 pieces · look before you ask",
+  },
+];
+
+/** The two jobs worth handing straight to Claude. Copy the box, paste, send. */
+const PROMPTS = [
+  {
+    when: "When you want to understand one",
+    why: "It writes an explanation into the files themselves, so it's there next time you look.",
+    text: `Open components/motion/Reveal.tsx and components/motion/Stagger.tsx. Add inline comments explaining every line to someone who has never written React. Then, in plain language in the chat, explain: what a variant is, what whileInView does, and why Stagger needs both a parent and a child component. Do not change any behavior.`,
+  },
+  {
+    when: "When you want it on your own pages",
+    why: "It shows you each change before making it, so nothing lands that you haven't looked at.",
+    text: `Read components/motion/ and /guide/motion. Now apply three things to the real portfolio pages, using only the existing library: Reveal on the homepage hero, Stagger + Hoverable on the project card grid, and Reveal on each case study's section headings. Nothing else. Match the timing tokens exactly. Show me the diff for each file before applying. After: run npm run build and tell me what to look at on my phone.`,
   },
 ];
 
@@ -40,20 +68,25 @@ export default function GuidePage() {
   return (
     <div className="mx-auto max-w-page px-step-4 md:px-step-5">
       <header className="py-step-5">
-        <p className="mb-step-3 font-mono text-xs tracking-[0.12em] text-accent uppercase">
-          Build notes
-        </p>
+        <div className="mb-step-3 flex items-center justify-between gap-step-3">
+          <p className="font-mono text-xs tracking-[0.12em] text-accent uppercase">
+            Start here
+          </p>
+          <WordsDrawer />
+        </div>
+
         <h1 className="mb-step-3 max-w-measure text-xl text-ink">
-          How to build this site, from nothing installed to a live URL.
+          From nothing installed to a site that&rsquo;s actually online.
         </h1>
         <p className="max-w-measure text-md text-ink/85">
-          This repo is a working Next.js site with placeholder words and a
-          placeholder look. These two documents are how you turn it into yours.
-          They ship with the code so they can&rsquo;t drift from it.
+          What you have is a working site wearing placeholder words and a
+          placeholder look. Every visual decision on it is still yours. These
+          three pages are how you make it yours, and they live inside the project
+          folder (where all your files are) so they can never go out of date.
         </p>
       </header>
 
-      <ul className="m-0 grid list-none grid-cols-1 gap-step-3 p-0 md:grid-cols-2">
+      <ul className="m-0 grid list-none grid-cols-1 gap-step-3 p-0 md:grid-cols-3">
         {ROUTES.map((route) => (
           <li key={route.href}>
             <Link
@@ -76,10 +109,17 @@ export default function GuidePage() {
       </ul>
 
       <section className="mt-step-5 border-t border-line py-step-5">
-        <h2 className="mb-step-3 text-lg text-ink">Run it locally</h2>
+        <h2 className="mb-step-3 text-lg text-ink">
+          Getting it onto your own computer
+        </h2>
         <p className="mb-step-3 max-w-measure text-sm text-ink/85">
-          Three commands. The setup guide explains what each one is for and what
-          to do when one of them fails.
+          Four lines, typed into the terminal (a text box for commands). The
+          setup walkthrough explains what each one is for, and what to do when
+          one of them goes wrong.
+        </p>
+        <p className="mb-step-2 max-w-measure font-mono text-xs text-muted">
+          Copies the files down, moves into the folder, fetches what the site
+          needs, then opens it at localhost:3000.
         </p>
         <pre className="mb-step-4 max-w-measure overflow-x-auto rounded-lg border border-line bg-black p-step-4 font-mono text-xs text-accent">
           {[
@@ -96,6 +136,43 @@ export default function GuidePage() {
         >
           Download the deck (.pptx) ↓
         </a>
+      </section>
+
+      <section className="border-t border-line py-step-5">
+        <h2 className="mb-step-3 text-lg text-ink">Asking for the movement</h2>
+        <p className="mb-step-4 max-w-measure text-sm text-ink/85">
+          Twelve pieces of movement are already built and named — the same idea
+          as a component in Figma, but for the way things arrive and respond.
+          Naming one gets you the exact movement used everywhere else on the
+          site. Describing a feeling gets you a new one that nobody chose.{" "}
+          <Link href="/guide/motion" className="text-accent">
+            Watch them running first
+          </Link>
+          , then use these.
+        </p>
+
+        <ul className="m-0 grid list-none gap-step-3 p-0 lg:grid-cols-2">
+          {PROMPTS.map((prompt) => (
+            <li
+              key={prompt.when}
+              className="flex min-w-0 flex-col rounded-lg border border-line bg-panel p-step-4"
+            >
+              <h3 className="mb-step-1 font-sans text-sm font-semibold tracking-normal text-ink">
+                {prompt.when}
+              </h3>
+              <p className="mb-step-3 text-xs text-muted">{prompt.why}</p>
+              <pre className="m-0 overflow-x-auto rounded border border-line bg-black p-step-3 font-mono text-xs whitespace-pre-wrap text-ink/85">
+                {prompt.text}
+              </pre>
+            </li>
+          ))}
+        </ul>
+
+        <p className="mt-step-4 max-w-measure text-xs text-muted">
+          Both of these are yours to run, in the Claude panel inside VS Code.
+          That is the whole point — you decide what happens and whether it was
+          any good.
+        </p>
       </section>
     </div>
   );

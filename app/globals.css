@@ -150,6 +150,48 @@
     mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 20%, transparent 75%);
   }
 
+  /* The "Words" glossary panel in the guide's header.
+
+     A real <dialog>, so the browser handles Esc, focus and the backdrop. The
+     0.18s is `duration.fast` and the curve is `ease`, both from
+     lib/motion-tokens.ts; the reduced-motion rule above already flattens it. */
+  .words-drawer {
+    margin: 0 0 0 auto;
+    height: 100%;
+    max-height: 100%;
+    width: min(28rem, 100%);
+    max-width: 100%;
+    border: 0;
+    border-left: 1px solid var(--color-line);
+    background-color: var(--color-panel);
+    color: var(--color-ink);
+    padding: 0;
+    overflow: hidden;
+  }
+  /* Only lay it out when it's actually open. A bare `display: flex` here would
+     beat the browser's own `dialog:not([open]) { display: none }` and leave the
+     panel sitting on the page permanently. */
+  .words-drawer[open] {
+    display: flex;
+    flex-direction: column;
+  }
+  .words-drawer::backdrop {
+    background-color: rgb(0 0 0 / 0.6);
+  }
+  .words-drawer[open] {
+    animation: words-in 0.18s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes words-in {
+    from {
+      opacity: 0;
+      transform: translateX(1rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   /* Staggered page-load reveal. Applied by [data-reveal] wrappers.
 
      These numbers are the CSS copies of lib/motion-tokens.ts and must match it:

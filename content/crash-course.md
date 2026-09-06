@@ -392,3 +392,118 @@ portfolio/
 | Vercel build failed | Run `npm run build` locally. Same error, easier to read. |
 
 > Stuck for more than ten minutes: screenshot the terminal, screenshot the browser, drop both into Claude with "what's wrong and what should I type?"
+
+---
+---
+
+# Quick start content (for `/guide/start`) — shown after setup
+
+## quickstart: intro
+### Quick start: put your first project in
+
+You don't write code to add a project. You add a folder. The site notices, and a page appears. Then you hand the folder to Claude and tell it what you want the page to be.
+
+## quickstart: folder
+### The projects folder
+
+```
+projects/
+├── README.md                 ← this same explanation, in the folder itself
+├── _template/                ← copy this. never edit it directly
+│   ├── project.md            ← fill-in-the-blanks case study
+│   ├── cover.jpg             ← replace with yours
+│   └── images/
+└── onboarding-redesign/      ← one folder per project. folder name = the URL
+    ├── project.md
+    ├── cover.jpg
+    ├── images/
+    │   ├── 01-research.png   ← number them in the order you'd tell the story
+    │   ├── 02-wireframes.png
+    │   └── 03-final.png
+    └── prototype/            ← optional: Figma export, flow notes, anything for a live prototype
+```
+
+The folder name becomes the address: `projects/onboarding-redesign` shows at `/work/onboarding-redesign`. Lowercase, dashes instead of spaces.
+
+## quickstart: steps
+### Five steps
+
+1. In VS Code's file tree, right-click `_template` → Duplicate. Rename the copy to your project, lowercase-with-dashes.
+2. Drag your files in from Finder: a cover image, screenshots into `images/`, a Figma PDF export, whatever you have. Names don't matter yet; you'll tidy them later.
+3. Open `project.md`. Fill in the top: title, your role, year, tools, one-line summary. Leave the long sections empty if you haven't written them. Save.
+4. Look at `localhost:3000/work`. Your project card is there. Click it. That's your page, unstyled and honest.
+5. Now hand it to Claude with one of the prompts below.
+
+## quickstart: template
+### What's in project.md
+
+```
+---
+title: Onboarding redesign
+role: Product designer
+year: 2026
+tools: Figma, Maze, Notion
+summary: One sentence. What it was and what changed.
+cover: cover.jpg
+---
+
+## Problem
+Who it was for, what was broken. One paragraph.
+
+## Constraints
+Time, team, tech, what you weren't allowed to change.
+
+## What I did
+Process and artifacts. Reference images like this: ![Early wireframes](images/02-wireframes.png)
+
+## Decisions and why
+The 2–3 forks in the road and what you picked. This is the part that gets you hired.
+
+## Outcome
+Shipped? Numbers? If none, what you learned.
+
+## What I'd change
+One honest paragraph.
+```
+
+## quickstart: prompts
+### Prompts you can paste into Claude Code right now
+
+Each of these assumes Claude Code is open in the panel with your project folder open. Replace `onboarding-redesign` with your folder name.
+
+**Prompt A — write it with me** (when you have files but no words yet)
+> Look at everything in projects/onboarding-redesign/. Using the section headings already in project.md, interview me: ask me one question at a time until you can fill in Problem, Constraints, What I did, Decisions and why, Outcome, and What I'd change. Keep my voice; don't make it sound corporate. Then write the draft into project.md, place my images where they belong in the story with a one-line caption each, and tell me to look at the page.
+
+**Prompt B — make it a designed page** (when the words are in)
+> Read projects/onboarding-redesign/project.md and its images. Turn /work/onboarding-redesign into a designed case study: cover image hero, a small sticky nav for the six sections, images full-width with captions, one pull quote from Decisions and why. Use Reveal on headings and Stagger on image groups from components/motion. Mobile first. Follow CLAUDE.md. Do not change my words. Show me the diff before applying.
+
+**Prompt C — add a live prototype** (the flex)
+> Look in projects/onboarding-redesign/prototype/. Build a working, clickable prototype of the onboarding flow as a piece embedded near the top of the case study page, sized like a phone on mobile and centered on desktop. Fake the data. Add a small "Try it" label above it. Don't touch anything else on the page.
+
+**Prompt D — fix what I'm looking at** (any time)
+> Here is a screenshot. [drag it in] The thing that's wrong: [say it plainly]. Fix only that.
+
+## quickstart: rules
+### Three rules that keep this fun
+
+- Add the folder first, prompt second. Claude does better when the files exist.
+- One prompt, one page. Don't ask for three case studies in one go.
+- Save, look, then decide. Never approve a change you haven't seen at phone width.
+
+---
+
+## explore
+### Now go find out what's possible
+
+The setup is done. The rules are written. From here, the only skill that matters is asking for what you want and knowing when to say no.
+
+Things designers with an agent next to them are doing right now:
+
+- Turning a Figma prototype into a working one people can actually use, in an afternoon.
+- Building a component library from their own design system and watching it become real code.
+- Making a case study that adapts: hover a decision, see the alternative you rejected.
+- Prototyping motion by describing it ("the card should settle like it landed on a table") and tuning by eye.
+- Shipping a side project to a real URL with a real domain before the idea gets stale.
+- Asking "what else could we do with this?" and following the answer.
+
+You don't need to know how any of it works underneath. You need to know what good looks like, say it clearly, and look carefully at what comes back. That's the job now. Have fun with it.
