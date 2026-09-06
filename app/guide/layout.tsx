@@ -40,6 +40,9 @@
  * It is stripped from production builds entirely.
  */
 
+import { notFound } from "next/navigation";
+import { guideIsVisible } from "@/lib/guide";
+
 const REDUCE_MOTION_SHIM = `
 (function () {
   try {
@@ -62,6 +65,10 @@ const REDUCE_MOTION_SHIM = `
 `;
 
 export default function GuideLayout({ children }: LayoutProps<"/guide">) {
+  // One check covers /guide and everything under it. Off your live site when
+  // showGuide is false in site.config.ts; always on at localhost:3000.
+  if (!guideIsVisible) notFound();
+
   return (
     <>
       {process.env.NODE_ENV === "development" && (

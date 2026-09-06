@@ -2,6 +2,7 @@ import Link from "next/link";
 import { site } from "@/content/site";
 import { getProjects } from "@/lib/projects";
 import { ProjectCard } from "@/components/project-card";
+import { guideIsVisible } from "@/lib/guide";
 
 /**
  * The homepage. Three things, in this order: who you are, what you've made,
@@ -45,29 +46,40 @@ export default function Home() {
           <p className="max-w-measure rounded-lg border border-line bg-panel p-step-4 text-sm text-muted">
             Nothing here yet. Duplicate{" "}
             <code className="font-mono text-accent">projects/_template</code>,
-            rename the copy, and it appears here as soon as you save — see{" "}
-            <Link href="/guide" className="text-accent">
-              the guide
-            </Link>
+            rename the copy, and it appears here as soon as you save
+            {guideIsVisible ? (
+              <>
+                {" "}
+                — see{" "}
+                <Link href="/guide" className="text-accent">
+                  the guide
+                </Link>
+              </>
+            ) : null}
             .
           </p>
         )}
       </section>
 
-      <section className="border-t border-line py-step-5">
-        <h2 className="mb-step-3 text-lg text-ink">How this site got built</h2>
-        <p className="mb-step-4 max-w-measure text-sm text-ink/85">
-          It isn&rsquo;t a template someone else designed. It&rsquo;s a Next.js
-          codebase, directed screen by screen and pushed to a live URL in a week.
-          The course and the setup guide that got it there are both on this site.
-        </p>
-        <Link
-          href="/guide"
-          className="inline-block rounded-lg bg-accent px-step-3 py-step-2 font-mono text-xs text-accent-ink no-underline"
-        >
-          Read the crash course →
-        </Link>
-      </section>
+      {/* Scaffolding, like the guide itself: it goes when the guide goes, so
+          the homepage can never point at a page that isn't there. */}
+      {guideIsVisible && (
+        <section className="border-t border-line py-step-5">
+          <h2 className="mb-step-3 text-lg text-ink">How this site got built</h2>
+          <p className="mb-step-4 max-w-measure text-sm text-ink/85">
+            It isn&rsquo;t a template someone else designed. It&rsquo;s a real
+            project, directed screen by screen and put online in a week. The
+            course and the setup walkthrough that got it there are both on this
+            site.
+          </p>
+          <Link
+            href="/guide"
+            className="inline-block rounded-lg bg-accent px-step-3 py-step-2 font-mono text-xs text-accent-ink no-underline"
+          >
+            Read the crash course →
+          </Link>
+        </section>
+      )}
     </div>
   );
 }

@@ -69,6 +69,39 @@ be mistaken for yours. Delete the folder once you have your own.
 - [Directing Claude Code](docs/directing-claude.md) — what a good prompt looks like here
 - [Deploying](docs/deploying.md) — GitHub, Vercel, and a domain
 
+## Scaffolding
+
+Some of this site is here to teach you, not to be part of your portfolio. It is
+all clearly separated, and none of it is load-bearing.
+
+### Hiding the guide
+
+Open `site.config.ts` and change one word:
+
+```ts
+showGuide: true   →   showGuide: false
+```
+
+Save, then `git add .` / `git commit -m "hide guide"` / `git push`. The guide
+disappears from your live site. It stays at `localhost:3000/guide` whenever you
+run the dev server, cookbook included, for as long as you want it. The Guide
+link vanishes from the nav at the same time, so nothing points at a page that
+isn't there.
+
+### Safe to delete, once you're done learning
+
+- `app/guide/` — the whole guide section
+- `content/crash-course.md` — the course text it reads
+- `projects/onboarding-redesign/` — the example project
+
+### Not scaffolding. Don't delete these
+
+- `projects/` — your actual projects
+- `app/work/` — the pages that show them
+- `components/motion/` — the animations your own pages use
+- `CLAUDE.md` — your design system, in words
+- `site.config.ts` — site settings
+
 ## Before you show it to anyone
 
 Everything marked `PLACEHOLDER` has to go: `content/site.ts`,

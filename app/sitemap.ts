@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/content/site";
 import { getProjectSlugs } from "@/lib/projects";
+import { guideIsVisible } from "@/lib/guide";
 
 /**
  * The list of pages search engines should know about.
@@ -14,8 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/work",
     "/about",
-    "/guide",
-    "/guide/setup",
+    ...(guideIsVisible ? ["/guide", "/guide/setup", "/guide/start", "/guide/motion"] : []),
     ...getProjectSlugs().map((slug) => `/work/${slug}`),
   ];
 

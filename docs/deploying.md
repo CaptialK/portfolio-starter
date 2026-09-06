@@ -78,15 +78,8 @@ Then the reject list, at the bottom of `CLAUDE.md`, on every page.
 
 ## Turning off the guide
 
-The course and the setup guide are scaffolding, not portfolio. When they've
-done their job:
+Open `site.config.ts`, change `showGuide` to `false`, and push. The guide goes
+from your live site and stays at `localhost:3000/guide`.
 
-1. Delete `app/guide/`, `components/deck/`, `components/guide/`,
-   `content/decks/`, `content/guide/`, and
-   `public/downloads/portfolio-crash-course.pptx`.
-2. Remove the `/guide` entry from `nav` in `content/site.ts`.
-3. Remove the `/guide` routes from `app/sitemap.ts` and the "How this site got
-   built" section from `app/page.tsx`.
-4. `npm run build` to confirm nothing else referenced them.
-
-Nothing else in the site depends on any of it.
+To remove it altogether rather than hide it, the README's Scaffolding section
+lists exactly which folders are safe to delete and which are not.
