@@ -32,39 +32,39 @@ every time you save a file.
 ## Where things are
 
 ```
-content/                 everything you'll actually edit
+projects/                your projects. one folder each
+  _template/             duplicate this to start one (folders starting with _ are ignored)
+  onboarding-redesign/   a worked example. delete it once you have your own
+content/                 everything else you'll edit
   site.ts                your name, email, links, nav
   about.mdx              the whole about page
-  work/                  one .mdx file per case study
-    _TEMPLATE.mdx        copy this to start one (files starting with _ are ignored)
-  decks/                 the crash course, as data
-  guide/                 the setup guide, as HTML
+  crash-course.md        the course text, for the /guide pages
+  guide/                 the setup walkthrough, as HTML
 app/                     one folder per URL
   globals.css            the design tokens: colour, type scale, spacing scale
 components/              the pieces the pages are built from
-lib/content.ts           reads content/work/ — you shouldn't need to touch it
+lib/projects.ts          reads projects/ — you shouldn't need to touch it
 public/                  images and downloads, served as-is
 CLAUDE.md                the design system in words. Claude Code reads it every session.
 ```
 
-## Adding a case study
+## Adding a project
 
-Copy `content/work/_TEMPLATE.mdx`, rename it, write. The file name becomes the
-URL, and the page appears on `/work` without you registering anything.
+Duplicate `projects/_template`, rename the copy, write. The folder name becomes
+the address, and the card appears on `/work` without you registering anything.
 
-Longer version, including the frontmatter fields and where images go:
-[`docs/adding-a-case-study.md`](docs/adding-a-case-study.md).
+Longer version, including the fields and where images go:
+[`docs/adding-a-project.md`](docs/adding-a-project.md).
 
-## The sample case studies
+## The example project
 
-Three of them, one per emphasis, all marked `draft: true`. That means they show
-while you run `npm run dev` and vanish from anything you build or deploy — you
-can read them for shape without any risk of shipping someone else's fiction.
-Delete all three once you have written your own.
+`projects/onboarding-redesign/` is filled in so you can see the shape of a
+finished one. Its summary starts with "EXAMPLE PROJECT" in capitals so it can't
+be mistaken for yours. Delete the folder once you have your own.
 
 ## Docs
 
-- [Adding a case study](docs/adding-a-case-study.md)
+- [Adding a project](docs/adding-a-project.md)
 - [The design system](docs/design-system.md) — how `globals.css` and `CLAUDE.md` fit together
 - [Directing Claude Code](docs/directing-claude.md) — what a good prompt looks like here
 - [Deploying](docs/deploying.md) — GitHub, Vercel, and a domain
@@ -72,5 +72,5 @@ Delete all three once you have written your own.
 ## Before you show it to anyone
 
 Everything marked `PLACEHOLDER` has to go: `content/site.ts`,
-`content/about.mdx`, and the three sample case studies. Then run the reject list
+`content/about.mdx`, and `projects/onboarding-redesign/`. Then run the reject list
 at the bottom of `CLAUDE.md` on every page.

@@ -1,14 +1,14 @@
 import Link from "next/link";
 import { site } from "@/content/site";
-import { getCaseStudies } from "@/lib/content";
-import { CaseCard } from "@/components/case-card";
+import { getProjects } from "@/lib/projects";
+import { ProjectCard } from "@/components/project-card";
 
 /**
  * The homepage. Three things, in this order: who you are, what you've made,
  * how to reach you. Nothing else earns its place above the fold.
  */
 export default function Home() {
-  const studies = getCaseStudies();
+  const projects = getProjects();
 
   return (
     <div className="mx-auto max-w-page px-step-4 md:px-step-5">
@@ -35,17 +35,17 @@ export default function Home() {
           </Link>
         </div>
 
-        {studies.length > 0 ? (
-          <ul className="m-0 list-none border-b border-line p-0">
-            {studies.slice(0, 3).map((study) => (
-              <CaseCard key={study.slug} study={study} />
+        {projects.length > 0 ? (
+          <ul className="m-0 grid list-none grid-cols-1 gap-step-3 p-0 sm:grid-cols-2 lg:grid-cols-3">
+            {projects.slice(0, 3).map((project) => (
+              <ProjectCard key={project.slug} project={project} />
             ))}
           </ul>
         ) : (
           <p className="max-w-measure rounded-lg border border-line bg-panel p-step-4 text-sm text-muted">
-            No case studies yet. Add an <code className="font-mono text-accent">.mdx</code>{" "}
-            file to <code className="font-mono text-accent">content/work/</code> and
-            it appears here — see{" "}
+            Nothing here yet. Duplicate{" "}
+            <code className="font-mono text-accent">projects/_template</code>,
+            rename the copy, and it appears here as soon as you save — see{" "}
             <Link href="/guide" className="text-accent">
               the guide
             </Link>

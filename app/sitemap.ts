@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/content/site";
-import { getCaseStudySlugs } from "@/lib/content";
+import { getProjectSlugs } from "@/lib/projects";
 
 /**
  * The list of pages search engines should know about.
@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/about",
     "/guide",
     "/guide/setup",
-    ...getCaseStudySlugs().map((slug) => `/work/${slug}`),
+    ...getProjectSlugs().map((slug) => `/work/${slug}`),
   ];
 
   return routes.map((route) => ({

@@ -72,7 +72,7 @@ Everything marked `PLACEHOLDER` has to be replaced:
 
 - `content/site.ts` — name, role, tagline, email, location, url, socials
 - `content/about.mdx` — the whole page
-- the three `content/work/sample-*.mdx` files — delete them
+- `projects/onboarding-redesign/` — the example project, delete the folder
 
 Then the reject list, at the bottom of `CLAUDE.md`, on every page.
 
